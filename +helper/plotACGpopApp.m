@@ -23,14 +23,15 @@ switch lower(lbindex)
         rgclabelnum = 4;
 end
 
-cells2oplt = (strcmpi(rgclabels,lbtomatch));
+cells2plt = (strcmpi(rgclabels,lbtomatch));
 
-x = repmat([app.singlecellpanel.UserData.acglag';nan(1,1)],sum(cells2oplt),1);
-y = [ app.singlecellpanel.UserData.acg(cells2oplt,:)';nan(1,sum(cells2oplt))];
+x = repmat([app.singlecellpanel.UserData.acg.lag';nan(1,1)],sum(cells2plt),1);
+y = [ app.singlecellpanel.UserData.acg.autocorr(cells2plt,:)';nan(1,sum(cells2plt))];
 
 
 if isempty(app.(['acgpop',num2str(rgclabelnum)]).Children)
     plot(app.(['acgpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    pbaspect(app.(['acgpop',num2str(rgclabelnum)]),[4 3 1]);
 else
     app.(['acgpop',num2str(rgclabelnum)]).Children.XData = x(:);
     app.(['acgpop',num2str(rgclabelnum)]).Children.YData = y(:);

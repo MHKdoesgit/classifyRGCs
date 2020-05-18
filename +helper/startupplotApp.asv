@@ -67,12 +67,12 @@ app.celltitle.FontSize = 22;
 %app.celltitle.FontWeight = 'bold';
         
 lblist = {'Off parasol','On parasol', 'Off midget','On midget'};
-lbline = '-';
+lbline = '*';
+
 for ii = 1:size(lblist,2)
-    app.([strrep(lblist{ii},' ',''),'Label']).Text = [repmat(lbline,1,55),repmat(' ',1,5),lblist{ii},repmat(' ',1,5),repmat(lbline,1,55)];
+    app.([strrep(lblist{ii},' ',''),'Label']).Text = [repmat(lbline,1,25),repmat(' ',1,5),lblist{ii},repmat(' ',1,5),repmat(lbline,1,25)];
     app.([strrep(lblist{ii},' ',''),'Label']).VerticalAlignment = 'top';
     app.([strrep(lblist{ii},' ',''),'Label']).HorizontalAlignment = 'center';
-    %app.([strrep(lblist{ii},' ',''),'Label']).Enable = 'on';
 end
 
 app.datapanel.Visible = 'on';
