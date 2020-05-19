@@ -9,7 +9,7 @@ switch lower(state)
     case 'new'
         
         col = app.UIFigure.UserData.colorset(5,:);      %lines(3);
-        lcol = 0.45 .* [1 1 1];%app.acg.XColor;
+        lcol = 0.5 .* [1 1 1];%app.acg.XColor;
         
         for ii = 1:6
             dsp = app.(['ds',num2str(ii)]);
@@ -32,6 +32,7 @@ switch lower(state)
             dsp.YColor = 'none';
             axmax = ceil(max(abs(dat.dsos.txtvals(curridx,ii,:)))/5)*5;
             dsp.XLim = [-axmax axmax];
+            axis(dsp,'off');
         end
         
         
@@ -50,6 +51,7 @@ switch lower(state)
             dsp(5).XData = squeeze(dat.dsos.grx(curridx,ii,:));    % grid
             dsp(5).YData = squeeze(dat.dsos.gry(curridx,ii,:));
             axmax = ceil(max(abs(dat.dsos.txtvals(curridx,ii,:)))/5)*5;
+            if axmax == 0, axmax = 1; end % to avoid axis issues when there is no response
             app.(['ds',num2str(ii)]).XLim = [-axmax axmax];
             
         end

@@ -22,8 +22,8 @@ y = [squeeze(appdat.rf.correctedcenter(2,:,:));nan(1,size(appdat.rf.correctedcen
 
 line(app.RFall, x(:),y(:),'color',0.65*[1 1 1],'linewidth',0.5);
 line(app.RFall, appdat.rf.correctedcenter(1,:,curridx),appdat.rf.correctedcenter(2,:,curridx),'color','r','linewidth',2);
-app.RFall.XLim = [0 appdat.rf.para.screen(1)];       app.RFall.YLim = [0 appdat.rf.para.screen(2)];
 axis(app.RFall,'equal');        axis(app.RFall,'tight');        box(app.RFall,'on');
+app.RFall.XLim = [0 appdat.rf.para.screen(1)];       app.RFall.YLim = [0 appdat.rf.para.screen(2)];
 app.RFall.XTick = [];           app.RFall.YTick = [];
 app.RFall.Title.String = ['center: ',num2str(round(appdat.rf.RFdiameter(curridx,1))),...
     ', surround: ',num2str(round(appdat.rf.gaussfit(curridx).surrounddiameter,1)),' (µm)'];
@@ -63,7 +63,7 @@ app.celltitle.Text = ['cell ',num2str(chinfo.ch),', cluster ',num2str(chinfo.clu
             ' for experiment on ',datemaker(appdat.savingpath)];
 app.celltitle.HorizontalAlignment = 'center';
 app.celltitle.VerticalAlignment = 'center';
-app.celltitle.FontSize = 22;
+app.celltitle.FontSize = 20;
 %app.celltitle.FontWeight = 'bold';
         
 lblist = {'Off parasol','On parasol', 'Off midget','On midget'};

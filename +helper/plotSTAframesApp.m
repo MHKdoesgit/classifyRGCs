@@ -98,6 +98,7 @@ switch lower(state)
         % axis([0 xm+xl(end) 0 ym+yl(end)]);
         axis(app.sta,'tight');
         axis(app.sta,'equal');
+        axis(app.sta,'off');
         app.sta.CLim = [-mx mx];
         hold(app.sta,'off');
         

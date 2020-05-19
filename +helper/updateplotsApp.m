@@ -32,6 +32,8 @@ app.RFall.Title.String = ['center: ',num2str(round(appdat.rf.RFdiameter(curridx,
 % spatial component
 xsx = appdat.rf.subrow(curridx,:);      xsx = xsx(~isnan(xsx));
 ysy = appdat.rf.subcol(curridx,:);      ysy = ysy(~isnan(ysy));
+xsx = xsx(1:size(appdat.rf.spatialComp,2));
+ysy = ysy(1:size(appdat.rf.spatialComp,1));
 mx = max(abs(appdat.rf.spatialComp(:,:,curridx)),[],'all');
 app.spatialcomp.Children(3).XData = xsx;
 app.spatialcomp.Children(3).YData = ysy;
