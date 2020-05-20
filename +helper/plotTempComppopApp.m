@@ -2,7 +2,8 @@
 
 function plotTempComppopApp(app, lbindex, varargin)
 
-rgclabels = app.T.Data(:,6);
+curridx     = app.T.UserData.curridx;
+rgclabels   = app.T.Data(:,6);
 
 switch lower(lbindex)
     
@@ -28,17 +29,29 @@ cells2plt = (strcmpi(rgclabels,lbtomatch));
 x = repmat([app.singlecellpanel.UserData.rf.para.time';nan(1,1)],sum(cells2plt),1);
 y = [ app.singlecellpanel.UserData.rf.tempComp(cells2plt,:)';nan(1,sum(cells2plt))];
 
+if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
+if any(ismember(find(cells2plt),curridx))
+    curry  = app.singlecellpanel.UserData.rf.tempComp(curridx,:);
+else
+    curry = nan(size(app.singlecellpanel.UserData.rf.para.time));
+end
+
 
 if isempty(app.(['tcpop',num2str(rgclabelnum)]).Children)
-    plot(app.(['tcpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    line(app.(['tcpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    line(app.(['tcpop',num2str(rgclabelnum)]), app.singlecellpanel.UserData.rf.para.time,...
+        curry, 'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
     app.(['tcpop',num2str(rgclabelnum)]).XLim = [0 500];
     app.(['tcpop',num2str(rgclabelnum)]).YLim = [-0.85 0.85];
+    app.(['tcpop',num2str(rgclabelnum)]).XLim = app.tempcomp.XLim;
     pbaspect(app.(['tcpop',num2str(rgclabelnum)]),[4 3 1]);
     %pbaspect(app.(['tcpop',num2str(rgclabelnum)]),[864 480 1])
     %axis( app.(['tcpop',num2str(rgclabelnum)]),'tight')
 else
-    app.(['tcpop',num2str(rgclabelnum)]).Children.XData = x(:);
-    app.(['tcpop',num2str(rgclabelnum)]).Children.YData = y(:);
+    app.(['tcpop',num2str(rgclabelnum)]).Children(1).YData = curry;
+    app.(['tcpop',num2str(rgclabelnum)]).Children(2).XData = x(:);
+    app.(['tcpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
 end
+
 
 end

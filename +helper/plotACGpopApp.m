@@ -2,7 +2,8 @@
 
 function plotACGpopApp(app, lbindex, varargin)
 
-rgclabels = app.T.Data(:,6);
+curridx     = app.T.UserData.curridx;
+rgclabels   = app.T.Data(:,6);
 
 switch lower(lbindex)
     
@@ -28,13 +29,24 @@ cells2plt = (strcmpi(rgclabels,lbtomatch));
 x = repmat([app.singlecellpanel.UserData.acg.lag';nan(1,1)],sum(cells2plt),1);
 y = [ app.singlecellpanel.UserData.acg.autocorr(cells2plt,:)';nan(1,sum(cells2plt))];
 
+if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
+if any(ismember(find(cells2plt),curridx))
+    curry  = app.singlecellpanel.UserData.acg.autocorr(curridx,:);
+else
+    curry = nan(size(app.singlecellpanel.UserData.acg.lag));
+end
+
 
 if isempty(app.(['acgpop',num2str(rgclabelnum)]).Children)
-    plot(app.(['acgpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    line(app.(['acgpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    line(app.(['acgpop',num2str(rgclabelnum)]),app.singlecellpanel.UserData.acg.lag, curry,...
+        'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
     pbaspect(app.(['acgpop',num2str(rgclabelnum)]),[4 3 1]);
+    app.(['acgpop',num2str(rgclabelnum)]).XLim = app.acg.XLim;
 else
-    app.(['acgpop',num2str(rgclabelnum)]).Children.XData = x(:);
-    app.(['acgpop',num2str(rgclabelnum)]).Children.YData = y(:);
+    app.(['acgpop',num2str(rgclabelnum)]).Children(2).XData = x(:);
+    app.(['acgpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
+    app.(['acgpop',num2str(rgclabelnum)]).Children(1).YData = curry;
 end
 
 end

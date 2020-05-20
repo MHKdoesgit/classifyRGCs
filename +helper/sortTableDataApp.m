@@ -1,11 +1,13 @@
 
 
-function sortTableDataApp(app, sortedcolumn)
+function sortTableDataApp(app, sortedcolumn, varargin)
 
 % switch lower(event.Interaction)
 %     case 'sort'
-[assort, assortidx] = sort([app.T.Data{:,sortedcolumn}],'ascend');
-[dssort, dssortidx] = sort([app.T.Data{:,sortedcolumn}],'descend');
+if nargin < 3, currtable = app.T.Data; else, currtable = varargin{1}; end
+
+[assort, assortidx] = sort([currtable{:,sortedcolumn}],'ascend');
+[dssort, dssortidx] = sort([currtable{:,sortedcolumn}],'descend');
 if isequal(assort, [app.T.DisplayData{:,sortedcolumn}])
     appsortingidx = assortidx;
 elseif isequal(dssort, [app.T.DisplayData{:,sortedcolumn}])
@@ -72,7 +74,7 @@ for ii = 1:numel(fn)
 end
 %app.T.UserData.curridx
 app.singlecellpanel.UserData = dat;
-app.T.Data = app.T.Data(appsortingidx,:); %app.T.DisplayData;
+app.T.Data = currtable(appsortingidx,:); %app.T.DisplayData;
 %app.T.UserData.sortindex = 1: size(dat.clus,1);
 app.T.UserData.sortedcolumn = sortedcolumn;
 %end
