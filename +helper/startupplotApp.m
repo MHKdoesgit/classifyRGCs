@@ -51,7 +51,7 @@ helper.plotSTAframesApp(app, 'new');
 
 helper.plotDSdataApp(app, 'new');
 
-helper.plotPCAsApp(app, 'new');
+helper.plotPCAsApp(app);
 
 app.classifyprogress.Limits = [1,size(app.T.Data,1)];
 app.classifyprogress.Value = curridx;

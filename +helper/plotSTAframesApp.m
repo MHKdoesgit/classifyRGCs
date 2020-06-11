@@ -30,11 +30,11 @@ switch lower(state)
     case 'new'
         % setting some options
         p = inputParser();
-        p.addParameter('gap', [1 1], @(x) isnumeric(x));
+        p.addParameter('gap', [2 2], @(x) isnumeric(x));
         p.addParameter('stapeak', nan(1,3));
         p.addParameter('outline', true, @(x) islogical(x));
         %p.addParameter('colormap', flipud(cbrewer('div','RdBu',255)));
-        p.addParameter('outlinecolor', 'k');
+        p.addParameter('outlinecolor', 0.5 .* [1 1 1]);
         p.addParameter('peakframeoutlinecolor', 'r');
         p.addParameter('peakframefontcolor', 'r');
         p.addParameter('showframenumber', true, @(x) islogical(x));
@@ -48,12 +48,12 @@ switch lower(state)
         %curridx = app.T.UserData.curridx;
         
         mx = max(abs(rf.STA{curridx}),[],'all');
-        nframes = 20;
-        nrows = 4;%dims(1);
+        nframes = 21;
+        nrows = 3;%dims(1);
         if numel(nrows)==1
             ncols = ceil(nframes / nrows);
         else
-            ncols = 5;%dims(2);
+            ncols = 7;%dims(2);
         end
         
         xl = linspace(0,rf.para.screen(1),rf.para.Nx);

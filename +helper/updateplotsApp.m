@@ -64,7 +64,7 @@ helper.plotDSdataApp(app,'update');
 %     
 % end
 
-helper.plotPCAsApp(app, 'update');
+helper.plotPCAsApp(app);
 
 app.classifyprogress.Value = curridx;
 
