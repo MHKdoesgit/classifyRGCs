@@ -1,6 +1,6 @@
 
 
-function res = Analyze_CheckerFlicker(ft, spikes, clusters, stimPara, varargin)
+function res = Analyze_CheckerFlicker(ft, spikes, clusters, stimPara, savingpath, varargin)
 %ANALYZECHEKERFLICKER
 
 %--------------------------------------------------------------------------
@@ -12,7 +12,7 @@ function res = Analyze_CheckerFlicker(ft, spikes, clusters, stimPara, varargin)
 % experimentPath=experiment.originalFolder;
 % folderName=[num2str(expId) '_' stimPara.stimulus];
 % if nargin<3, options=defaultOptions(stimPara.stimulus); else, options=varargin{1}; end
-% res=stimdata; res.options=options; 
+% res=stimdata; res.options=options;
 % %--------------------------------------------------------------------------
 % disp(['Starting ' stimPara.stimulus ' analysis for stimulus ' num2str(expId) '...'])
 
@@ -30,6 +30,8 @@ function res = Analyze_CheckerFlicker(ft, spikes, clusters, stimPara, varargin)
 % stimPara.nsigma = 2;
 % stimPara.nonlinBinN = 40;
 
+if nargin < 5, savingpath = []; end
+
 expId = stimPara.expnumber;
 if isfield(stimPara,'nblinks'), stimPara.Nblinks = stimPara.nblinks; stimPara = rmfield(stimPara,'nblinks'); end
 
@@ -39,7 +41,7 @@ stimPara.Ny = ceil(stimPara.screen(2)/stimPara.stixelheight);
 disp(['Starting ' stimPara.stimulus ' analysis for stimulus ' num2str(expId) '...'])
 
 
-Nt = ceil(stimPara.filterWindow*stimPara.refreshrate/stimPara.Nblinks); 
+Nt = ceil(stimPara.filterWindow*stimPara.refreshrate/stimPara.Nblinks);
 Ny = stimPara.Ny; Nx = stimPara.Nx;
 Ncells = size(clusters,1);
 if iscell(spikes) && size(spikes,2)~=2
@@ -55,14 +57,14 @@ spikesbin  = rf.blinkBinnerKS(spiketimes, Ncells, ft(:,1), ft(:,2), stimPara.Nbl
 %--------------------------------------------------------------------------
 fprintf('Generating STAs for the running part... ');
 if isfield(stimPara,'secondSeedFlag')
-    seeduse = stimPara.seed2; 
+    seeduse = stimPara.seed2;
 else
     seeduse = stimPara.seed;
 end
 staAll = rf.calculateSTAbwGPU(spikesbin, Nt, Nx*Ny, seeduse, stimPara.contrast);
 staAll = reshape(staAll, Ncells, Ny, Nx,Nt);
 staAll = flip(staAll, 2);
-res.staAll = staAll; 
+res.staAll = staAll;
 fprintf('Done! \n');
 %--------------------------------------------------------------------------
 %define coordinates
@@ -110,9 +112,9 @@ cellspktimes = accumarray(spiketimes(:,2),spiketimes(:,1), [Ncells, 1], @(x) {x}
 disp('Beginning cell by cell analysis...'); tic;
 msg = [];
 for icell = 1:Ncells
-
+    
     if iuse(icell) == 0, continue; end
-    csta = double(squeeze(staAll(icell,:,:,:)));   
+    csta = double(squeeze(staAll(icell,:,:,:)));
     %======================================================================
     % select ROI after blurring
     smsta = rf.smoothSTA(squeeze(staAll(icell,:,:,:)), 0.5);
@@ -124,7 +126,7 @@ for icell = 1:Ncells
     zoomsta = reshape(csta(rangeY, rangeX, :), numel(rangeY)*numel(rangeX), Nt);
     
     allrangex{icell} = rangeX; allrangey{icell} = rangeY;
-    %======================================================================  
+    %======================================================================
     % find significant pixels in the zoomed region
     [bpx, ~] = find(abs(zoomsta) > rfac*mad(csta(:),1));
     if isempty(bpx), continue, end
@@ -140,21 +142,21 @@ for icell = 1:Ncells
     temporalComponents(icell, :) = tempcomp;
     
     % get simple ellipse fit and contour
-   
+    
     [contpts, contarea, centgaussparams] = rf.getRfContourPts(...
         spaceVecX(rangeX),spaceVecY(rangeY), spcomp);
-        
-%     c = getEllipseFromParams(centgaussparams, 2);
-%     clf; 
-%     imagesc(spaceVecX(rangeX),spaceVecY(rangeY), spcomp, [-1 1]*max(abs(spcomp(:))));
-%     hold on; colormap(redblue)
-%     plot(contpts(1,:), contpts(2,:), '-k', c(1,:), c(2,:), 'g')
-% 
-%     areac = contarea*(dpx*1e3)^2;
-%     effd  = 2*sqrt(areac/pi);
-%     title(sprintf('diam: %d', round(effd*1e3)))
     
-    gaussParams(icell, :) = centgaussparams; 
+    %     c = getEllipseFromParams(centgaussparams, 2);
+    %     clf;
+    %     imagesc(spaceVecX(rangeX),spaceVecY(rangeY), spcomp, [-1 1]*max(abs(spcomp(:))));
+    %     hold on; colormap(redblue)
+    %     plot(contpts(1,:), contpts(2,:), '-k', c(1,:), c(2,:), 'g')
+    %
+    %     areac = contarea*(dpx*1e3)^2;
+    %     effd  = 2*sqrt(areac/pi);
+    %     title(sprintf('diam: %d', round(effd*1e3)))
+    
+    gaussParams(icell, :) = centgaussparams;
     contourareas(icell)   = contarea*(dpx*1e3)^2;
     rfdiam = rf.getRFDiam(rf.getGaussFromParams(centgaussparams), stimPara.nsigma, dpx);
     ellipseareas(icell) = pi * (rfdiam*1e3/2)^2;
@@ -164,7 +166,7 @@ for icell = 1:Ncells
     % fit DoG+time RF model
     tempGuess  = rf.fitTemporalComponent(timeVec, tempcomp);
     spaceGuess = rf.dogreceptfield2(spaceVecX(rangeX), spaceVecY(rangeY), spcomp);
-
+    
     fullGuess = [tempGuess spaceGuess(1:6) spaceGuess(8)/spaceGuess(7)];
     stafit    = permute(reshape(zoomsta,numel(rangeY),numel(rangeX), Nt), [3 1 2]);
     modelprms = rf.fitParametricSTA2(timeVec, spaceVecX(rangeX), spaceVecY(rangeY), stafit, fullGuess);
@@ -196,6 +198,16 @@ for icell = 1:Ncells
     end
 end
 
+% to change the format of contourpoints from cell to mat for faster plotting
+cp = contourpoints;
+bigestcont = max(cellfun(@(x) (size(x,2)),cp));
+contpts = nan(Ncells,2,bigestcont+1);
+for ii = 1:Ncells
+    if not(isempty(cp{ii}))
+        contpts(ii,:,1:size(cp{ii},2)) = cp{ii};
+    end
+end
+
 sigmas = linspace(0,8,1e3);
 %central equation
 activations = (1-exp(-sigmas.^2/2))-...
@@ -208,10 +220,10 @@ autoCorrs = autoCorrs./sum(autoCorrs,2);
 res.spatialComponents  = spatialComponents;        res.modelscomps         = modelscomps;
 res.temporalComponents = temporalComponents;       res.modeltcomps         = modeltcomps;
 res.autoCorrelations   = autoCorrs;                res.surroundIdx         = surrIdx;
-res.sigmaActivation    = activations;              res.sigmaVals           = sigmas;    
+res.sigmaActivation    = activations;              res.sigmaVals           = sigmas;
 res.allrangex          = allrangex;                res.allrangey           = allrangey;
 res.contourareas       = contourareas;             res.ellipseareas        = ellipseareas;
-res.rfdiameters        = rfdiameters;              res.contourpoints       = contourpoints;
+res.rfdiameters        = rfdiameters;              res.contourpoints       = contpts;
 res.gaussparams        = gaussParams;              res.rfmodelparams       = rfmodelparams;
 res.ellipsepoints      = ellipsepoints;            res.allmoran            = allmoran;
 %--------------------------------------------------------------------------
@@ -261,13 +273,16 @@ end
 
 res.nlncentslr    = nlncentslr;      res.nlnvalslr     = nlnvalslr;
 res.nlncentsmodel = nlncentsmodel;   res.nlnvalsmodel  = nlnvalsmodel;
+res.stimPara      = stimPara;
 
 fprintf('Done! Took %2.2f s...\n', toc);
 %--------------------------------------------------------------------------
-fprintf('Saving data... '); tic;
-% saveName=['\' num2str(expId) '_analysis.mat'];
-% save([experimentPath,'\data_analysis\' folderName saveName], '-struct', 'res')
-fprintf('Done! Took %2.2f s...\n', toc);
+if not(isempty(savingpath))
+    fprintf('Saving data... '); tic;
+    saveName = [filesep, num2str(expId,'%02d'), '-checkerflicker_analysis.mat'];
+    save([savingpath,saveName], '-v7.3', '-struct', 'res');
+    fprintf('Done! Took %2.2f s...\n', toc);
+end
 %--------------------------------------------------------------------------
 end
 

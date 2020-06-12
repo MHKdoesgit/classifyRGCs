@@ -13,24 +13,11 @@ switch lower(state)
         for ii = 1:6
             
             if dat.dsos.dsi(curridx,ii) > 0.15 && dat.dsos.dsi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
-                if strcmpi(app.themeSwitch.Value,'light')
-                    col = [0 0.75 1];
-                    titrcol = [0 0.3 0.8];
-                else
-                    col = [0 0.75 1];
-                    titrcol = [0 0.8 1];
-                end
+                col = [0 0.75 1];      %lines(3);
             elseif dat.dsos.osi(curridx,ii) > 0.15 && dat.dsos.osi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
-                if strcmpi(app.themeSwitch.Value,'light')
-                    col = [0.54 0.17 0.89];
-                    titrcol = [0.34 0.1 0.69];
-                else
-                    col = [0.74 0.27 1]; 
-                    titrcol = [0.8 0.4 0.9];
-                end
+                col = [0.54 0.17 0.89];      %lines(3);
             else
                 col = app.UIFigure.UserData.colorset(5,:);      %lines(3);
-                titrcol = app.acg.Title.Color;
             end
             dsp = app.(['ds',num2str(ii)]);
             
@@ -48,12 +35,13 @@ switch lower(state)
             axis(dsp,'equal');      axis(dsp,'tight');
             dsp.XTick = [];
             dsp.YTick = [];
-            titr = sprintf('dsi:%2.2f, ds-pval:%2.2f, osi:%2.2f\nos-pval:%2.2f, quality:%2.2f',dat.dsos.dsi(curridx,ii),...
+%             titr = {sprintf('dsi:%2.2f,dspval:%2.2f,osi:%2.2f',dat.dsos.dsi(curridx),dat.dsos.dsi_pval(curridx),dat.dsos.osi(curridx),...
+%                 sprintf('ospval:%2.2f,q:%2.2f',dat.dsos.dsi(curridx),dat.dsos.dsi_pval(curridx),dat.dsos.osi(curridx)}
+            titr = sprintf('dsi:%2.2f,ds_pval:%2.2f,osi:%2.2f\nos_pval:%2.2f,quality:%2.2f',dat.dsos.dsi(curridx,ii),...
                 dat.dsos.dsi_pval(curridx,ii),dat.dsos.osi(curridx,ii),dat.dsos.osi_pval(curridx,ii),dat.dsos.respquality(curridx));
-            dsp.Title.String        =  titr;
-            dsp.Title.FontSize      = 10;
-            dsp.Title.FontWeight    = 'normal';
-            dsp.Title.Color         = titrcol;
+            dsp.Title.String =  titr;
+            dsp.Title.FontSize = 10;
+            dsp.Title.FontWeight = 'normal';
             dsp.XColor = 'none';
             dsp.YColor = 'none';
             axmax = ceil(max(abs(dat.dsos.txtvals(curridx,ii,:)))/5)*5;
@@ -68,25 +56,15 @@ switch lower(state)
             % dsp = app.(['ds',num2str(ii)]);
             % cla(dsp);
             if dat.dsos.dsi(curridx,ii) > 0.15 && dat.dsos.dsi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
-                if strcmpi(app.themeSwitch.Value,'light')
-                    col = [0 0.75 1];
-                    titrcol = [0 0.3 0.8];
-                else
-                    col = [0 0.75 1];
-                    titrcol = [0 0.8 1];
-                end
+                col = [0 0.75 1];      %lines(3);
+                titrcol = [0 0.5 0.9];                
             elseif dat.dsos.osi(curridx,ii) > 0.15 && dat.dsos.osi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
-                if strcmpi(app.themeSwitch.Value,'light')
-                    col = [0.54 0.17 0.89]; 
-                    titrcol = [0.34 0.1 0.69];
-                else
-                    col = [0.74 0.27 1]; 
-                    titrcol = [0.8 0.4 0.9];
-                end
+                col = [0.54 0.17 0.89];      %lines(3);
+                titrcol = [0.34 0.1 0.69];                
             else
-                col = app.UIFigure.UserData.colorset(5,:);
-                titrcol = app.acg.Title.Color;
-            end
+                col = app.UIFigure.UserData.colorset(5,:); 
+                titrcol = [0. 0.1 0.1]
+            end            
             
             dsp = app.(['ds',num2str(ii)]).Children;
             dsp(1).String{1} = sprintf(' %g', round(dat.dsos.txtvals(curridx,ii,2)));
@@ -102,7 +80,7 @@ switch lower(state)
             axmax = ceil(max(abs(dat.dsos.txtvals(curridx,ii,:)))/5)*5;
             if axmax == 0, axmax = 1; end % to avoid axis issues when there is no response
             app.(['ds',num2str(ii)]).XLim = [-axmax axmax];
-            titr = sprintf('dsi:%2.2f, ds-pval:%2.2f, osi:%2.2f\nos-pval:%2.2f, quality:%2.2f',dat.dsos.dsi(curridx,ii),...
+            titr = sprintf('dsi:%2.2f,ds_pval:%2.2f,osi:%2.2f\nos_pval:%2.2f,quality:%2.2f',dat.dsos.dsi(curridx,ii),...
                 dat.dsos.dsi_pval(curridx,ii),dat.dsos.osi(curridx,ii),dat.dsos.osi_pval(curridx,ii),dat.dsos.respquality(curridx));
             app.(['ds',num2str(ii)]).Title.String =  titr;
             app.(['ds',num2str(ii)]).Title.Color  =  titrcol;

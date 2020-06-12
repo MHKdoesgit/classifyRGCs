@@ -26,9 +26,9 @@ end
 
 cells2plt = (strcmpi(rgclabels,lbtomatch));
 
-rf = app.singlecellpanel.UserData.rf.correctedcenter;
-x = squeeze(rf(1,:,cells2plt));
-y = squeeze(rf(2,:,cells2plt));
+rfdata = app.singlecellpanel.UserData.rfdata.contourpoints;
+x = squeeze(rfdata(cells2plt,1,:));
+y = squeeze(rfdata(cells2plt,2,:));
 
 if size(x,2) ~= sum(cells2plt)
     x = transpose(x);
@@ -37,8 +37,8 @@ end
 
 if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
 if any(ismember(find(cells2plt),curridx))
-    currx  = squeeze(rf(1,:,curridx));
-    curry  = squeeze(rf(2,:,curridx));
+    currx  = squeeze(rfdata(curridx,1,:));
+    curry  = squeeze(rfdata(curridx,2,:));
 else
     currx  = NaN;
     curry  = NaN;

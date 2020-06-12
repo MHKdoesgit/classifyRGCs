@@ -43,6 +43,7 @@ app.RFall.Title.String = ['center: ',num2str(round(appdat.rfdata.rfdiameters(cur
 xsx = appdat.rfdata.spaceVecX(appdat.rfdata.allrangex{curridx});
 ysy = appdat.rfdata.spaceVecY(appdat.rfdata.allrangey{curridx});
 sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{curridx}, appdat.rfdata.allrangex{curridx}));
+mx = [-1 1]* max(abs(sc(:)));
 
 % spatial component
 % xsx = appdat.rf.subrow(curridx,:);      xsx = xsx(~isnan(xsx));
@@ -53,9 +54,7 @@ sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{cu
 app.spatialcomp.Children(3).XData = xsx;
 app.spatialcomp.Children(3).YData = ysy;
 app.spatialcomp.Children(3).CData = sc;
-if ~isempty(sc)
-    app.spatialcomp.CLim = [-1 1]* max(abs(sc(:)));
-end
+app.spatialcomp.CLim = [-mx mx];
 % plotting receptive field center
 app.spatialcomp.Children(1).XData = squeeze(appdat.rfdata.ellipsepoints(curridx,1,:)); %appdat.rf.correctedcenter(1,:,curridx);
 app.spatialcomp.Children(1).YData = squeeze(appdat.rfdata.ellipsepoints(curridx,2,:)); %appdat.rf.correctedcenter(2,:,curridx);
@@ -63,7 +62,7 @@ app.spatialcomp.Children(1).YData = squeeze(appdat.rfdata.ellipsepoints(curridx,
 app.spatialcomp.Children(2).XData = squeeze(appdat.rfdata.contourpoints(curridx,1,:)); %appdat.rf.correctedcenter(1,:,curridx);
 app.spatialcomp.Children(2).YData = squeeze(appdat.rfdata.contourpoints(curridx,2,:)); %appdat.rf.correctedcenter(2,:,curridx);
 app.spatialcomp.Title.String = ['morans I: ', num2str(round(appdat.rfdata.allmoran(curridx,1),2)),...
-    ', surround index: ', num2str(round(appdat.rfdata.surroundIdx(curridx,1),2))];
+    ', surround index: ', num2str(round(appdat.rfdata.surroundIdx(curridx,1),3))];
 
 
 % STA frames

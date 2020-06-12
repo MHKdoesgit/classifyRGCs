@@ -26,19 +26,19 @@ end
 
 cells2plt = (strcmpi(rgclabels,lbtomatch));
 
-x = [ app.singlecellpanel.UserData.nl.nlx(cells2plt,:),nan(sum(cells2plt),1)]';
-y = [ app.singlecellpanel.UserData.nl.nly(cells2plt,:),nan(sum(cells2plt),1)]';
+x = [ app.singlecellpanel.UserData.rfdata.nlncentsmodel(cells2plt,:),nan(sum(cells2plt),1)]';
+y = [ app.singlecellpanel.UserData.rfdata.nlnvalsmodel(cells2plt,:),nan(sum(cells2plt),1)]';
 
 if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
 if any(ismember(find(cells2plt),curridx))
-    currx  = app.singlecellpanel.UserData.nl.nlx(curridx,:);
-    curry  = app.singlecellpanel.UserData.nl.nly(curridx,:);
+    currx  = app.singlecellpanel.UserData.rfdata.nlncentsmodel(curridx,:);
+    curry  = app.singlecellpanel.UserData.rfdata.nlnvalsmodel(curridx,:);
 else
     currx  = NaN;
     curry  = NaN;
 end
 
-if isfield(app.singlecellpanel.UserData.rfdata,'nlncentsmodel')
+if isfield(app.singlecellpanel.UserData,'nl')
     if isempty(app.(['nlpop',num2str(rgclabelnum)]).Children)
         line(app.(['nlpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
         line(app.(['nlpop',num2str(rgclabelnum)]), currx, curry,...
