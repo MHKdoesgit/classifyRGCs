@@ -67,7 +67,7 @@ switch lower(state)
         for ii = 1:6
             % dsp = app.(['ds',num2str(ii)]);
             % cla(dsp);
-            if dat.dsos.dsi(curridx,ii) > 0.15 && dat.dsos.dsi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
+            if dat.dsos.dsi(curridx,ii) > 0.14 && dat.dsos.dsi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.49
                 if strcmpi(app.themeSwitch.Value,'light')
                     col = [0 0.75 1];
                     titrcol = [0 0.3 0.8];
@@ -75,7 +75,7 @@ switch lower(state)
                     col = [0 0.75 1];
                     titrcol = [0 0.8 1];
                 end
-            elseif dat.dsos.osi(curridx,ii) > 0.15 && dat.dsos.osi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
+            elseif dat.dsos.osi(curridx,ii) > 0.14 && dat.dsos.osi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.49
                 if strcmpi(app.themeSwitch.Value,'light')
                     col = [0.54 0.17 0.89]; 
                     titrcol = [0.34 0.1 0.69];

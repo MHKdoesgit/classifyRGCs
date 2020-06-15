@@ -24,7 +24,7 @@ for ii = 1:3
     if isempty(app.(['pca',num2str(ii)]).Children)
         
         if strcmpi(app.themeSwitch.Value,'light')
-            colface = 0.7 .* [1 1 1];
+            colface = 0.8 .* [1 1 1];
             coledge = 0.3 .* [1 1 1];
         else
             colface = 0.75 .* [1 1 1];
@@ -35,7 +35,7 @@ for ii = 1:3
         pcaplt = app.(['pca',num2str(ii)]);
         % first all points
         line(pcaplt, dat.pcadata.scores(:,ii), dat.rfdata.contourareas,'Marker','o', 'LineStyle','none',...
-            'MarkerFaceColor' ,colface,'Color',coledge,'MarkerSize',5);
+            'MarkerFaceColor' ,colface,'Color',coledge,'MarkerSize',4);
         hold(pcaplt,'on');
         % then selected classes
         %         line(pcaplt, x,y,'Marker','o','LineStyle','none','Color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.1),...
@@ -53,7 +53,7 @@ for ii = 1:3
         end
         % and finally current cell
         line(pcaplt, dat.pcadata.scores(curridx,ii), dat.rfdata.contourareas(curridx),'Marker','o', 'LineStyle','none',...
-            'MarkerFaceColor' ,curridxcol,'Color',[0.85 0.078 0.24],'MarkerSize',7);
+            'MarkerFaceColor' ,curridxcol,'Color',[0.85 0.078 0.24],'MarkerSize',6);
         
         pcaplt.XLim = [-max(abs(pcaplt.XLim)) max(abs(pcaplt.XLim))];
         pcaplt.XTick = -5:0.5:5;

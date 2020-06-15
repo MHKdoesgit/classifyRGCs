@@ -54,9 +54,9 @@ imagesc(app.spatialcomp,xsx,ysy, sc, [-1 1]* max(abs(sc(:))));
 %imagesc(app.spatialcomp,xsx,ysy,appdat.rf.spatialComp(1:length(xsx),1:length(ysy),curridx));
 hold( app.spatialcomp, 'on' );
 line(app.spatialcomp,squeeze(appdat.rfdata.contourpoints(curridx,1,:)),...
-    squeeze(appdat.rfdata.contourpoints(curridx,2,:)),'color',0.45.*[1 1 1]);
+    squeeze(appdat.rfdata.contourpoints(curridx,2,:)),'color','k','LineWidth',1);
 line(app.spatialcomp,squeeze(appdat.rfdata.ellipsepoints(curridx,1,:)),...
-    squeeze(appdat.rfdata.ellipsepoints(curridx,2,:)),'color','k');
+    squeeze(appdat.rfdata.ellipsepoints(curridx,2,:)),'color',0.45.*[1 1 1]);
 
 %plot(app.spatialcomp,appdat.rf.correctedcenter(1,:,curridx),appdat.rf.correctedcenter(2,:,curridx),'k','LineWidth',2);
 %app.spatialcomp.CLim = [-mx mx];
