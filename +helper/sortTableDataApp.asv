@@ -9,6 +9,7 @@ if nargin < 3, currtable = app.T.Data; else, currtable = varargin{1}; loaddatafl
 if ~isa(sortedcolumn,'double'), sortedcolumn = double(sortedcolumn); end
 
 if sortedcolumn < 6
+    
     [assort, assortidx] = sort([currtable{:,sortedcolumn}],'ascend');
     [dssort, dssortidx] = sort([currtable{:,sortedcolumn}],'descend');
     if isequaln(assort, [app.T.DisplayData{:,sortedcolumn}]) % use isequaln to consider NaN, otherwise you are fucked
@@ -24,16 +25,19 @@ if sortedcolumn < 6
 else
     % for the label and comments columns
     [assort, assortidx] = sortrows(currtable(:,sortedcolumn),'ascend');
-    [dssort, dssortidx] = sortrows(currtable(:,sortedcolumn),'descend');
-    if isequaln(assort, app.T.DisplayData(:,sortedcolumn)) % use isequaln to consider NaN, otherwise you are fucked
+    [dssort, dssortidx] = sortrows(currtable(:,sortedcolumn)],'descend');
+    if isequaln(assort, [app.T.DisplayData{:,sortedcolumn}]) % use isequaln to consider NaN, otherwise you are fucked
         appsortingidx = assortidx;
         sortdir = 'ascend';
-    elseif isequaln(dssort, app.T.DisplayData(:,sortedcolumn))
+    elseif isequaln(dssort, [app.T.DisplayData{:,sortedcolumn}])
         appsortingidx = dssortidx;
         sortdir = 'descend';
     else
         [~,appsortingidx] = sort([app.T.DisplayData{:,1}],'ascend'); % back to original state
     end
+    
+    
+    
 end
 %si = app.T.UserData.sortindex;
 if isrow(appsortingidx), appsortingidx = appsortingidx'; end

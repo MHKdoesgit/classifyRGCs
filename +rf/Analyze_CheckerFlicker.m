@@ -1,34 +1,9 @@
 
 
 function res = Analyze_CheckerFlicker(ft, spikes, clusters, stimPara, savingpath, varargin)
+
 %ANALYZECHEKERFLICKER
-
 %--------------------------------------------------------------------------
-% stimdata=loadRawStimData(experiment,expId); stimPara=stimdata.stimPara;
-% switch stimPara.stimulus
-%     case 'frozencheckerflicker'
-%         res=analyzeFrozenCheckerFlickerNew(experiment,expId); return;
-% end
-% experimentPath=experiment.originalFolder;
-% folderName=[num2str(expId) '_' stimPara.stimulus];
-% if nargin<3, options=defaultOptions(stimPara.stimulus); else, options=varargin{1}; end
-% res=stimdata; res.options=options;
-% %--------------------------------------------------------------------------
-% disp(['Starting ' stimPara.stimulus ' analysis for stimulus ' num2str(expId) '...'])
-
-
-% stimPara = stimdata.stimPara;
-% stimPara.refreshrate = 60;
-% stimPara.screen = [800 600];
-% stimPara.fs = 2.5e4;
-% stimPara.pulseRate = 2;
-% stimPara.seed = stimPara.seedrunningnoise;
-% stimPara.secondseed = stimPara.seedfrozennoise;
-% stimPara.pixelsize = 7.5e-6;
-% % old options
-% stimPara.filterWindow = 0.5;
-% stimPara.nsigma = 2;
-% stimPara.nonlinBinN = 40;
 
 if nargin < 5, savingpath = []; end
 
@@ -86,8 +61,8 @@ iuse = sum((abs(staAll(:,:)) - rfac*allmads)>0, 2);
 
 dpx = stimPara.pixelsize;
 %contfac = 0.14;
-dtcorr  = 5e-4;
-Ncorr   = 60e-3/dtcorr;
+%dtcorr  = stimPara.dtcorr;  %5e-4;
+%Ncorr   = stimPara.Ncorr;   %60e-3/dtcorr; % old values
 nelipspoints = 100;
 
 gaussParams        = NaN(Ncells, 6);
@@ -95,7 +70,7 @@ spatialComponents  = zeros(Ncells, Ny, Nx,'single');
 modelscomps        = zeros(Ncells, Ny, Nx,'single');
 temporalComponents = zeros(Ncells, Nt,'single');
 modeltcomps        = zeros(Ncells, Nt,'single');
-autoCorrs          = NaN(Ncells, Ncorr, 'single');
+autoCorrs          = NaN(Ncells, stimPara.Ncorr, 'single');
 rfdiameters        = NaN(Ncells, 1);
 ellipseareas       = NaN(Ncells, 1);
 contourareas       = NaN(Ncells, 1);
@@ -187,9 +162,9 @@ for icell = 1:Ncells
     %==========================================================================
     % get acg
     spks = cellspktimes{icell}/stimPara.fs;
-    K = rf.ccg(spks, spks, Ncorr, dtcorr);
-    K(Ncorr+1) = 0;
-    autoCorrs(icell, :) = single(K((Ncorr+1):end-1));
+    K = rf.ccg(spks, spks, stimPara.Ncorr, stimPara.dtcorr);
+    K(stimPara.Ncorr+1) = 0;
+    autoCorrs(icell, :) = single(K((stimPara.Ncorr+1):end-1));
     %==========================================================================
     if mod(icell, 20) == 0 || icell == Ncells
         fprintf(repmat('\b', 1, numel(msg)));
@@ -214,12 +189,16 @@ activations = (1-exp(-sigmas.^2/2))-...
     rfmodelparams(:,end).*(1-exp(-sigmas.^2/2./rfmodelparams(:,11).^2));
 activations(activations<0) = 0;
 surrIdx = 1-activations(:,end)./max(activations,[],2);
-
-autoCorrs = autoCorrs./sum(autoCorrs,2);
+% autocorr output
+if stimPara.normACG
+    autoCorrs = autoCorrs./sum(autoCorrs,2);
+end
+autoCorrsLag   = linspace(0, stimPara.Ncorr * stimPara.dtcorr *1e3, stimPara.Ncorr); % xaxis of autocorr
 %--------------------------------------------------------------------------
 res.spatialComponents  = spatialComponents;        res.modelscomps         = modelscomps;
 res.temporalComponents = temporalComponents;       res.modeltcomps         = modeltcomps;
-res.autoCorrelations   = autoCorrs;                res.surroundIdx         = surrIdx;
+res.autoCorrelations   = autoCorrs;                res.autoCorrLag         = autoCorrsLag;                 
+res.surroundIdx         = surrIdx;
 res.sigmaActivation    = activations;              res.sigmaVals           = sigmas;
 res.allrangex          = allrangex;                res.allrangey           = allrangey;
 res.contourareas       = contourareas;             res.ellipseareas        = ellipseareas;

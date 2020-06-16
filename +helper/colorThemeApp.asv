@@ -105,6 +105,9 @@ end
 
 % theme switch button
 app.themeSwitch.FontColor = fontcol;
+
+%
+%
 %
 % fn = fieldnames(app.themeSwitch);
 % col = fn(contains(fn,'Color','IgnoreCase',true))

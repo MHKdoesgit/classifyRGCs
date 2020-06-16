@@ -10,13 +10,11 @@ lbtomatch = {'off parasol', 'on parasol', 'off midget', 'on midget'};
 dat = app.singlecellpanel.UserData;
 curridxcol = [1 0 0];
 
-
 for ii = 1:3
     %rf = app.singlecellpanel.UserData.rf.correctedcenter;
     %     x = dat.pcadata.scores(cells2plt,ii);
     %     y = dat.rf.RFdiameter(cells2plt);
-    %
-    %
+    
     %     if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
     %currx  = dat.pcadata.scores(curridx,ii);
     %curry  = dat.rf.RFdiameter(curridx);
@@ -82,9 +80,5 @@ for ii = 1:3
         app.(['pca',num2str(ii)]).Children(1).YData = dat.rfdata.contourareas(curridx);
     end
 end
-
-
-
-
 
 end

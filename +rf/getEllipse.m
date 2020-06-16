@@ -1,3 +1,5 @@
+
+
 function [ c ] = getEllipse( gauss, nsigma,detail)
 %GETELLIPSE Summary of this function goes here
 %   Detailed explanation goes here

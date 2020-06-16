@@ -26,7 +26,7 @@ end
 
 cells2plt = (strcmpi(rgclabels,lbtomatch));
 
-rfdata = app.singlecellpanel.UserData.rfdata.contourpoints;
+rfdata = app.singlecellpanel.UserData.rfcontours.contourspts;
 x = squeeze(rfdata(cells2plt,1,:));
 y = squeeze(rfdata(cells2plt,2,:));
 

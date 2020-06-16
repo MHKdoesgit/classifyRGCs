@@ -16,6 +16,11 @@ stimPara = checkstimParaArgs(stimPara, 'pulseRate', 2);
 stimPara = checkstimParaArgs(stimPara, 'filterWindow', 0.5);
 stimPara = checkstimParaArgs(stimPara, 'nsigma', 2);
 stimPara = checkstimParaArgs(stimPara, 'nonlinBinN', 40);
+% for auto-correlogram
+stimPara = checkstimParaArgs(stimPara, 'dtcorr', 5e-4);         % 5e-4;
+stimPara = checkstimParaArgs(stimPara, 'Ncorr', 250e-3 / 5e-4); % %60e-3/dtcorr; % old values
+stimPara = checkstimParaArgs(stimPara, 'normACG', false); 
+
 if strcmpi( rd.lightprojection, 'oled')
     pixsize = 7.5e-6;
 else % now for lightcrafter, add option for patch setups later

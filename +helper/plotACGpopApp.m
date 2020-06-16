@@ -31,8 +31,10 @@ y = [ app.singlecellpanel.UserData.acg.autocorr(cells2plt,:)';nan(1,sum(cells2pl
 
 if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
 if any(ismember(find(cells2plt),curridx))
+    currx  = app.singlecellpanel.UserData.acg.lag;
     curry  = app.singlecellpanel.UserData.acg.autocorr(curridx,:);
 else
+    currx = nan(size(app.singlecellpanel.UserData.acg.lag));
     curry = nan(size(app.singlecellpanel.UserData.acg.lag));
 end
 
@@ -46,6 +48,7 @@ if isempty(app.(['acgpop',num2str(rgclabelnum)]).Children)
 else
     app.(['acgpop',num2str(rgclabelnum)]).Children(2).XData = x(:);
     app.(['acgpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
+    app.(['acgpop',num2str(rgclabelnum)]).Children(1).XData = currx;
     app.(['acgpop',num2str(rgclabelnum)]).Children(1).YData = curry;
 end
 

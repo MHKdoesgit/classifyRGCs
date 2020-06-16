@@ -53,7 +53,7 @@ sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{cu
 app.spatialcomp.Children(3).XData = xsx;
 app.spatialcomp.Children(3).YData = ysy;
 app.spatialcomp.Children(3).CData = sc;
-if ~isempty(sc)
+if ~isempty(sc) && max(abs(sc(:))) ~= 0
     app.spatialcomp.CLim = [-1 1]* max(abs(sc(:)));
 end
 % plotting receptive field center

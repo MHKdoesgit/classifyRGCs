@@ -43,7 +43,8 @@ if isfield(app.singlecellpanel.UserData.rfdata,'nlncentsmodel')
         line(app.(['nlpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
         line(app.(['nlpop',num2str(rgclabelnum)]), currx, curry,...
             'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
-        app.(['nlpop',num2str(rgclabelnum)]).XLim = [-3.1 3.1];
+        app.(['nlpop',num2str(rgclabelnum)]).XLim = [-3.2 3.2];
+        app.(['nlpop',num2str(rgclabelnum)]).YLim = [0 1.1];
         pbaspect(app.(['nlpop',num2str(rgclabelnum)]),[4 3 1]);
     else
         app.(['nlpop',num2str(rgclabelnum)]).Children(2).XData = x(:);

@@ -6,12 +6,10 @@ curridx = app.T.UserData.curridx;
 dat = app.singlecellpanel.UserData;
 
 switch lower(state)
-    case 'new'
-        
+    case 'new'        
         lcol = 0.5 .* [1 1 1];%app.acg.XColor;
         
-        for ii = 1:6
-            
+        for ii = 1:6            
             if dat.dsos.dsi(curridx,ii) > 0.15 && dat.dsos.dsi_pval(curridx,ii) < 0.05 && dat.dsos.respquality(curridx) > 0.5
                 if strcmpi(app.themeSwitch.Value,'light')
                     col = [0 0.75 1];
@@ -60,8 +58,7 @@ switch lower(state)
             dsp.XLim = [-axmax axmax];
             axis(dsp,'off');
         end
-        
-        
+                
     case 'update'
         
         for ii = 1:6
@@ -108,6 +105,5 @@ switch lower(state)
             app.(['ds',num2str(ii)]).Title.Color  =  titrcol;
         end
 end
-
 
 end

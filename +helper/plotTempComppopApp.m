@@ -42,7 +42,7 @@ if isempty(app.(['tcpop',num2str(rgclabelnum)]).Children)
     line(app.(['tcpop',num2str(rgclabelnum)]), app.singlecellpanel.UserData.rfdata.timeVec,...
         curry, 'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
     app.(['tcpop',num2str(rgclabelnum)]).XLim = [-0.5 0];
-    app.(['tcpop',num2str(rgclabelnum)]).YLim = [-0.5 0.5];
+    app.(['tcpop',num2str(rgclabelnum)]).YLim = [-0.85 0.85];
     app.(['tcpop',num2str(rgclabelnum)]).XLim = app.tempcomp.XLim;
     pbaspect(app.(['tcpop',num2str(rgclabelnum)]),[4 3 1]);
     %pbaspect(app.(['tcpop',num2str(rgclabelnum)]),[864 480 1])
@@ -52,6 +52,5 @@ else
     app.(['tcpop',num2str(rgclabelnum)]).Children(2).XData = x(:);
     app.(['tcpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
 end
-
 
 end
