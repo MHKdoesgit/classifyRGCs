@@ -50,7 +50,10 @@ xsx = appdat.rfdata.spaceVecX(appdat.rfdata.allrangex{curridx});
 ysy = appdat.rfdata.spaceVecY(appdat.rfdata.allrangey{curridx});
 sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{curridx}, appdat.rfdata.allrangex{curridx}));
 
-imagesc(app.spatialcomp,xsx,ysy, sc, [-1 1]* max(abs(sc(:))));
+imagesc(app.spatialcomp,xsx,ysy, sc);
+if ~isempty(sc) && max(abs(sc(:))) ~= 0
+   app.spatialcomp.CLim = [-1 1]* max(abs(sc(:)));
+end
 %imagesc(app.spatialcomp,xsx,ysy,appdat.rf.spatialComp(1:length(xsx),1:length(ysy),curridx));
 hold( app.spatialcomp, 'on' );
 line(app.spatialcomp,squeeze(appdat.rfdata.contourpoints(curridx,1,:)),...

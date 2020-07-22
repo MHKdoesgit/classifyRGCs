@@ -7,9 +7,23 @@ switch lower(state)
     case 'loaddata'
         dp = uigetdir(['D:',filesep,'2-MARMOSET',filesep],'Select Data Folder');
         app.UIFigure.UserData.savingpath = dp;
-        cldata = dir([dp,filesep,'Data for manual classification of cells*']);
-        app.UIFigure.UserData.datafilename = [cldata.folder,filesep,cldata.name];
-        app.singlecellpanel.UserData = load([cldata.folder,filesep,cldata.name]);
+        cldata = dir([dp,filesep,'*Data for manual classification of cells*']);
+        if numel(cldata) > 1
+            [indx,tf] = listdlg('PromptString','More than one dataset for classification is found, select one:',...
+                'Name','Data selection','SelectionMode','single','ListString',{cldata.name},'ListSize',[500 100]);
+            if tf
+                app.UIFigure.UserData.datafilename = [cldata(indx).folder,filesep,cldata(indx).name];
+                app.singlecellpanel.UserData = load([cldata(indx).folder,filesep,cldata(indx).name]);
+            else
+                uialert(app.UIFigure,{'yo bro, what the actuall fuck!,',...
+                    ' you should select one of the datasets if you want classify them!'},...
+                    'aint no file was selected');
+            end
+        else
+            app.UIFigure.UserData.datafilename = [cldata.folder,filesep,cldata.name];
+            app.singlecellpanel.UserData = load([cldata.folder,filesep,cldata.name]);
+        end
+        
         usercldata = dir([dp,filesep,'Classified retinal ganglion cells for experiment on*']);
         if not(isempty(usercldata))
             usercldata = load([usercldata.folder,filesep,usercldata.name]);

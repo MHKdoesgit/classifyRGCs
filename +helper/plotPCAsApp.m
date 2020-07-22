@@ -1,6 +1,8 @@
 
 
-function plotPCAsApp(app)
+function plotPCAsApp(app, varargin)
+
+if nargin > 1, showpts = varargin{1}; else, showpts = false; end
 
 curridx     = app.T.UserData.curridx;
 rgclabels   = app.T.Data(:,6);
@@ -9,8 +11,16 @@ lbtomatch = {'off parasol', 'on parasol', 'off midget', 'on midget'};
 
 dat = app.singlecellpanel.UserData;
 curridxcol = [1 0 0];
+if strcmpi(app.themeSwitch.Value,'light')
+    colface = 0.8 .* [1 1 1];
+    coledge = 0.3 .* [1 1 1];
+else
+    colface = 0.75 .* [1 1 1];
+    coledge = 0.95 .* [1 1 1];
+end
 
-for ii = 1:3
+
+for ii = 1:4
     %rf = app.singlecellpanel.UserData.rf.correctedcenter;
     %     x = dat.pcadata.scores(cells2plt,ii);
     %     y = dat.rf.RFdiameter(cells2plt);
@@ -20,16 +30,6 @@ for ii = 1:3
     %curry  = dat.rf.RFdiameter(curridx);
     
     if isempty(app.(['pca',num2str(ii)]).Children)
-        
-        if strcmpi(app.themeSwitch.Value,'light')
-            colface = 0.8 .* [1 1 1];
-            coledge = 0.3 .* [1 1 1];
-        else
-            colface = 0.75 .* [1 1 1];
-            coledge = 0.95 .* [1 1 1];
-        end
-        
-        
         pcaplt = app.(['pca',num2str(ii)]);
         % first all points
         line(pcaplt, dat.pcadata.scores(:,ii), dat.rfdata.contourareas,'Marker','o', 'LineStyle','none',...
@@ -79,6 +79,27 @@ for ii = 1:3
         app.(['pca',num2str(ii)]).Children(1).XData = dat.pcadata.scores(curridx,ii);
         app.(['pca',num2str(ii)]).Children(1).YData = dat.rfdata.contourareas(curridx);
     end
+    
+    if showpts % this is to hide or show the pca point on all the plots
+        if isequal(app.(['pca',num2str(ii)]).Children(6).Color, coledge)
+            app.(['pca',num2str(ii)]).Children(6).Color  = app.(['pca',num2str(ii)]).Color;
+            app.(['pca',num2str(ii)]).Children(6).MarkerFaceColor  = app.(['pca',num2str(ii)]).Color;
+        else
+            app.(['pca',num2str(ii)]).Children(6).Color  = coledge;
+            app.(['pca',num2str(ii)]).Children(6).MarkerFaceColor  = colface;
+        end
+            
+%         switch lower(showpts)
+%             case 'show'
+%                 app.(['pca',num2str(ii)]).Children(6).Color  = coledge;
+%                 app.(['pca',num2str(ii)]).Children(6).MarkerFaceColor  = colface;
+%             case 'hide'
+%                 app.(['pca',num2str(ii)]).Children(6).Color  = app.(['pca',num2str(ii)]).Color;
+%                 app.(['pca',num2str(ii)]).Children(6).MarkerFaceColor  = app.(['pca',num2str(ii)]).Color;
+%         end
+        
+    end
+
 end
 
 end

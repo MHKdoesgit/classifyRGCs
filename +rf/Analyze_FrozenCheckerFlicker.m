@@ -80,11 +80,11 @@ res.frozenTimeVec=frozenTimeVec;
 %--------------------------------------------------------------------------
 disp('Generating STAs for the running part...');
 seeduse = stimPara.seed;
-if isfield(stimPara, 'color')
-    if stimPara.color
-        seeduse = stimPara.seed/2;
-    end
-end
+% if isfield(stimPara, 'color')
+%     if stimPara.color
+%         seeduse = stimPara.seed/2;
+%     end
+% end
 staAll = rf.calculateBlockSTAbwGPU(runningbin, Nt, Nx*Ny, seeduse, stimPara.contrast);
 staAll = reshape(staAll, Ncells, Ny, Nx,Nt);
 staAll = flip(staAll,2); %flipping because of C++

@@ -81,8 +81,13 @@ sorteddat.rfcontours.shapes = sortDatfield_2D(dat.rfcontours, 'shapes', appsorti
 sorteddat.rfcontours.centroids = sortDatfield_2D(dat.rfcontours, 'centroids', appsortingidx, 1);
 sorteddat.rfcontours.scalevalue = dat.rfcontours.scalevalue;
 
+if isfield(dat.rfdata, 'frozenRates')
+    frozenflag = true;
+else
+    frozenflag = false;
+end
 % receptive field data
-sorteddat.rfdata.allReliableRsq = sortDatfield_2D(dat.rfdata, 'allReliableRsq', appsortingidx, 1);
+if frozenflag, sorteddat.rfdata.allReliableRsq = sortDatfield_2D(dat.rfdata, 'allReliableRsq', appsortingidx, 1); end
 sorteddat.rfdata.allmoran = sortDatfield_2D(dat.rfdata, 'allmoran', appsortingidx, 1);
 sorteddat.rfdata.allrangex = sortDatfield_2D(dat.rfdata, 'allrangex', appsortingidx, 1);
 sorteddat.rfdata.allrangey = sortDatfield_2D(dat.rfdata, 'allrangey', appsortingidx, 1);
@@ -92,15 +97,19 @@ sorteddat.rfdata.contourareas = sortDatfield_2D(dat.rfdata, 'contourareas', apps
 sorteddat.rfdata.contourpoints = sortDatfield_3D(dat.rfdata, 'contourpoints', appsortingidx, 1);
 sorteddat.rfdata.ellipseareas = sortDatfield_2D(dat.rfdata, 'ellipseareas', appsortingidx, 1);
 sorteddat.rfdata.ellipsepoints = sortDatfield_3D(dat.rfdata, 'ellipsepoints', appsortingidx, 1);
-sorteddat.rfdata.frozenRates = sortDatfield_2D(dat.rfdata, 'frozenRates', appsortingidx, 1);
-sorteddat.rfdata.frozenTimeVec = dat.rfdata.frozenTimeVec;
+if frozenflag
+    sorteddat.rfdata.frozenRates = sortDatfield_2D(dat.rfdata, 'frozenRates', appsortingidx, 1);
+    sorteddat.rfdata.frozenTimeVec = dat.rfdata.frozenTimeVec;
+end
 sorteddat.rfdata.gaussparams = sortDatfield_2D(dat.rfdata, 'gaussparams', appsortingidx, 1);
-sorteddat.rfdata.lrCCnorm = sortDatfield_2D(dat.rfdata, 'lrCCnorm', appsortingidx, 1);
-sorteddat.rfdata.lrRsq = sortDatfield_2D(dat.rfdata, 'lrRsq', appsortingidx, 1);
-sorteddat.rfdata.lrpredictions = sortDatfield_2D(dat.rfdata, 'lrpredictions', appsortingidx, 1);
-sorteddat.rfdata.modelCCnorm = sortDatfield_2D(dat.rfdata, 'modelCCnorm', appsortingidx, 1);
-sorteddat.rfdata.modelRsq = sortDatfield_2D(dat.rfdata, 'modelRsq', appsortingidx, 1);
-sorteddat.rfdata.modelpredictions = sortDatfield_2D(dat.rfdata, 'modelpredictions', appsortingidx, 1);
+if frozenflag
+    sorteddat.rfdata.lrCCnorm = sortDatfield_2D(dat.rfdata, 'lrCCnorm', appsortingidx, 1);
+    sorteddat.rfdata.lrRsq = sortDatfield_2D(dat.rfdata, 'lrRsq', appsortingidx, 1);
+    sorteddat.rfdata.lrpredictions = sortDatfield_2D(dat.rfdata, 'lrpredictions', appsortingidx, 1);
+    sorteddat.rfdata.modelCCnorm = sortDatfield_2D(dat.rfdata, 'modelCCnorm', appsortingidx, 1);
+    sorteddat.rfdata.modelRsq = sortDatfield_2D(dat.rfdata, 'modelRsq', appsortingidx, 1);
+    sorteddat.rfdata.modelpredictions = sortDatfield_2D(dat.rfdata, 'modelpredictions', appsortingidx, 1);
+end
 sorteddat.rfdata.modelscomps = sortDatfield_3D(dat.rfdata, 'modelscomps', appsortingidx, 1);
 sorteddat.rfdata.modeltcomps = sortDatfield_2D(dat.rfdata, 'modeltcomps', appsortingidx, 1);
 sorteddat.rfdata.nlncentslr = sortDatfield_2D(dat.rfdata, 'nlncentslr', appsortingidx, 1);
@@ -119,8 +128,9 @@ sorteddat.rfdata.stimPara = dat.rfdata.stimPara;
 sorteddat.rfdata.surroundIdx = sortDatfield_2D(dat.rfdata, 'surroundIdx', appsortingidx, 1);
 sorteddat.rfdata.temporalComponents = sortDatfield_2D(dat.rfdata, 'temporalComponents', appsortingidx, 1);
 sorteddat.rfdata.timeVec = dat.rfdata.timeVec;
-sorteddat.rfdata.trialRates = sortDatfield_3D(dat.rfdata, 'trialRates', appsortingidx, 1);
-
+if frozenflag
+    sorteddat.rfdata.trialRates = sortDatfield_3D(dat.rfdata, 'trialRates', appsortingidx, 1);
+end
 
 sorteddat.savingpath = dat.savingpath;
 sorteddat.sortinginfo = sortDatfield_2D(dat, 'sortinginfo', appsortingidx, 1);
@@ -215,6 +225,8 @@ if isfield(dat,flfn)
         case 2
             flout = dat.(flfn)(:,sortidx);
     end
+else
+    flout = 'field does not exist';
 end
 end
 
@@ -230,6 +242,8 @@ if isfield(dat,flfn)
         case 3
             flout = dat.(flfn)(:,:,sortidx);
     end
+else
+    flout = 'field does not exist';
 end
 end
 
@@ -246,6 +260,8 @@ if isfield(dat,flfn)
         case 4
             flout = dat.(flfn)(:,:,:,sortidx);
     end
+else
+    flout = 'field does not exist';
 end
 end
 
@@ -264,6 +280,8 @@ if isfield(dat,flfn)
         case 5
             flout = dat.(flfn)(:,:,:,:,sortidx);
     end
+else
+    flout = 'field does not exist';
 end
 end
 

@@ -31,9 +31,9 @@ switch lower(state)
     case 'new'
         % setting some options
         p = inputParser();
-        p.addParameter('nframes', 18, @(x) isnumeric(x));
+        p.addParameter('nframes', 15, @(x) isnumeric(x));
         p.addParameter('nrows', 3, @(x) isnumeric(x));
-        p.addParameter('ncols', 6, @(x) isnumeric(x));
+        p.addParameter('ncols', 5, @(x) isnumeric(x));
         p.addParameter('gap', [2 2], @(x) isnumeric(x));
         %p.addParameter('stapeak', nan(1,3));
         p.addParameter('outline', true, @(x) islogical(x));

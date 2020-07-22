@@ -2,46 +2,33 @@
 
 function colorThemeApp(app, colmode)
 
+%hex2rgbfun = @(x)(reshape(sscanf(x(2:end).','%2x'),3,[]).'/255);
 
-switch colmode
+switch lower(colmode)
     case 'light'
-        bkgcol      = 0.94 .* [1 1 1];
-        fgrdcol     = 0.15 .*[1 1 1];
-        buttoncol   = 0.85 .* [1 1 1];
-        fontcol     = [0.1 0.1 0.1];
-        pltcol      = [1 1 1];
-        gridcol     = [0.15 0.15 0.15];
-        cmp         = flipud(cbrewer('div','RdBu',255));
-        tabrowstrip = 'on';
-        tabstyle    = uistyle("BackgroundColor",fgrdcol,'FontAngle','italic','FontColor',bkgcol,"FontWeight",'bold');
+        bkgcol          = 0.94 .* [1 1 1];
+        fgrdcol         = 0.15 .* [1 1 1];
+        buttoncol       = 0.80 .* [1 1 1];
+        fontcol         = 0.25 .* [1 1 1];
+        buttonfontcol   = 0.1  .* [1 1 1];
+        pltcol          = 1    .* [1 1 1];
+        gridcol         = [0.15 0.15 0.15];
+        cmp             = flipud(cbrewer('div','RdBu',255));
+        tabrowstrip     = 'on';
+        tabstyle        = uistyle("BackgroundColor",fgrdcol,'FontColor',bkgcol,"FontWeight",'bold');
         
     case 'dark'
-        bkgcol      = 0.14 .* [1 1 1];
-        fgrdcol     = 0.85 .* [1 1 1];
-        buttoncol   = 0.25 .* [1 1 1];
-        fontcol     = 0.90 .* [1 1 1];
-        pltcol      = 0.14 .* [1 1 1];
-        gridcol     = 0.75 .* [1 1 1];
-        cmp         = flipud(cbrewer('div','RdBu',255));
-        tabrowstrip = 'off';
-        tabstyle    = uistyle("BackgroundColor",fgrdcol,'FontAngle','italic','FontColor',bkgcol,"FontWeight",'bold');
+        bkgcol          = 0.12 .* [1 1 1];
+        fgrdcol         = 0.75 .* [1 1 1];
+        buttoncol       = 0.35 .* [1 1 1];
+        fontcol         = 0.80 .* [1 1 1];
+        buttonfontcol   = 0.95 .* [1 1 1];
+        pltcol          = 0.18 .* [1 1 1];
+        gridcol         = 0.85 .* [1 1 1];
+        cmp             = flipud(cbrewer('div','RdBu',255));
+        tabrowstrip     = 'off';
+        tabstyle        = uistyle("BackgroundColor",fgrdcol,'FontColor',bkgcol,"FontWeight",'bold');
 end
-
-% whole figure color
-app.UIFigure.Color = bkgcol;
-app.UIFigure.Colormap = cmp;
-if not(isfield(app.UIFigure.UserData,'colorset'))
-    app.UIFigure.UserData.colorset = lines(255);
-end
-
-% menus
-app.FileMenu.ForegroundColor = [0.1 0.1 0.1];
-app.EditMenu.ForegroundColor = [0.1 0.1 0.1];
-%table colors
-app.T.BackgroundColor = bkgcol;
-app.T.ForegroundColor = fgrdcol;
-app.T.RowStriping = tabrowstrip;
-app.T.UserData.tablestyle = tabstyle;
 
 % get all the components
 appcomps = fieldnames(app);
@@ -50,20 +37,37 @@ for ii = 1 : numel(appcomps)
     appcompstypes{ii} = get(app.(appcomps{ii}),'type');
 end
 
-% buttons color
-buttonlist = find(strcmp(appcompstypes,'uibutton'));
-for ii = 1:length(buttonlist)
-    app.(appcomps{buttonlist(ii)}).BackgroundColor = buttoncol;
-    app.(appcomps{buttonlist(ii)}).FontColor = fontcol;
+% whole figure color
+figurelist = find(strcmp(appcompstypes,'figure'));
+for ii = 1:length(figurelist)
+    app.(appcomps{figurelist(ii)}).Color = bkgcol;
+    app.(appcomps{figurelist(ii)}).Colormap = cmp;
+    if not(isfield(app.(appcomps{figurelist(ii)}).UserData,'colorset'))
+        app.(appcomps{figurelist(ii)}).UserData.colorset = lines(255);
+    end 
+end
+
+% menus
+menulist = find(strcmp(appcompstypes,'uimenu'));
+for ii = 1:length(menulist)
+    app.(appcomps{menulist(ii)}).ForegroundColor = [0.01 0.01 0.01];
+end
+
+%table colors
+tablelist = find(strcmp(appcompstypes,'uitable'));
+for ii = 1:length(tablelist)
+    app.(appcomps{tablelist(ii)}).BackgroundColor = bkgcol;
+    app.(appcomps{tablelist(ii)}).ForegroundColor = fgrdcol;
+    app.(appcomps{tablelist(ii)}).RowStriping = tabrowstrip;
+    app.(appcomps{tablelist(ii)}).UserData.tablestyle = tabstyle;
 end
 
 % axes color
 axeslist = find(strcmp(appcompstypes,'axes'));
-for ii = 1:length(axeslist)
-    
+for ii = 1:length(axeslist)    
     %app.(appcomps{axeslist(ii)}).Colormap = cmp;
     app.(appcomps{axeslist(ii)}).GridColor = gridcol;
-    app.(appcomps{axeslist(ii)}).MinorGridColor = gridcol-0.05;
+    app.(appcomps{axeslist(ii)}).MinorGridColor = abs(gridcol-0.05);
     app.(appcomps{axeslist(ii)}).XColor = fgrdcol;
     app.(appcomps{axeslist(ii)}).YColor = fgrdcol;
     app.(appcomps{axeslist(ii)}).ZColor = fgrdcol;
@@ -96,19 +100,27 @@ for ii = 1:length(axeslist)
     
 end
 
-% lalel colors
-labellist = find(strcmp(appcompstypes,'uilabel'));
-for ii = 1:length(labellist)
-    app.(appcomps{labellist(ii)}).BackgroundColor = bkgcol;
-    app.(appcomps{labellist(ii)}).FontColor = fontcol;
+
+% buttons color
+componentlist = find(ismember(appcompstypes,{'uilabel','uidropdown','uinumericeditfield'}));
+for ii = 1:length(componentlist)
+    app.(appcomps{componentlist(ii)}).BackgroundColor = bkgcol;
+    app.(appcomps{componentlist(ii)}).FontColor = fontcol;
 end
 
-% theme switch button
-app.themeSwitch.FontColor = fontcol;
-%
-% fn = fieldnames(app.themeSwitch);
-% col = fn(contains(fn,'Color','IgnoreCase',true))
-%
+% 
+% buttons color
+buttonlist = find(strcmp(appcompstypes,'uibutton'));
+for ii = 1:length(buttonlist)
+    app.(appcomps{buttonlist(ii)}).BackgroundColor = buttoncol;
+    app.(appcomps{buttonlist(ii)}).FontColor = buttonfontcol;
+end
+
+% uiknob
+switchknoblist = find(ismember(appcompstypes,{'uiknob','uiswitch'}));
+for ii = 1:length(switchknoblist)
+    app.(appcomps{switchknoblist(ii)}).FontColor = fontcol;
+end
 
 
 end
