@@ -40,6 +40,7 @@ end
 
 if isfield(app.singlecellpanel.UserData.rfdata,'nlncentsmodel')
     if isempty(app.(['nlpop',num2str(rgclabelnum)]).Children)
+        patch(app.(['nlpop',num2str(rgclabelnum)]), x(:),y(:),1,'edgecolor','none');
         line(app.(['nlpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
         line(app.(['nlpop',num2str(rgclabelnum)]), currx, curry,...
             'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
@@ -51,6 +52,9 @@ if isfield(app.singlecellpanel.UserData.rfdata,'nlncentsmodel')
         app.(['nlpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
         app.(['nlpop',num2str(rgclabelnum)]).Children(1).XData = currx;
         app.(['nlpop',num2str(rgclabelnum)]).Children(1).YData = curry;
+        app.(['nlpop',num2str(rgclabelnum)]).Children(2).LineWidth = 0.5;
+        app.(['nlpop',num2str(rgclabelnum)]).Children(2).Color = app.UIFigure.UserData.colorset(rgclabelnum,:);
+        app.(['nlpop',num2str(rgclabelnum)]).Children(2).LineStyle = '-';
     end
 end
 

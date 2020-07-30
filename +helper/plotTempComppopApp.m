@@ -38,7 +38,8 @@ end
 
 
 if isempty(app.(['tcpop',num2str(rgclabelnum)]).Children)
-    line(app.(['tcpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
+    patch(app.(['tcpop',num2str(rgclabelnum)]), x(:),y(:),1,'edgecolor','none');
+    line(app.(['tcpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
     line(app.(['tcpop',num2str(rgclabelnum)]), app.singlecellpanel.UserData.rfdata.timeVec,...
         curry, 'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
     app.(['tcpop',num2str(rgclabelnum)]).XLim = [-0.5 0];
@@ -51,6 +52,9 @@ else
     app.(['tcpop',num2str(rgclabelnum)]).Children(1).YData = curry;
     app.(['tcpop',num2str(rgclabelnum)]).Children(2).XData = x(:);
     app.(['tcpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
+    app.(['tcpop',num2str(rgclabelnum)]).Children(2).LineWidth = 0.5;
+    app.(['tcpop',num2str(rgclabelnum)]).Children(2).Color = app.UIFigure.UserData.colorset(rgclabelnum,:);
+    app.(['tcpop',num2str(rgclabelnum)]).Children(2).LineStyle = '-';
 end
 
 end

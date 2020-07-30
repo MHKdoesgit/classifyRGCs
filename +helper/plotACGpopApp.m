@@ -40,6 +40,7 @@ end
 
 
 if isempty(app.(['acgpop',num2str(rgclabelnum)]).Children)
+    patch(app.(['acgpop',num2str(rgclabelnum)]), x(:),y(:),1,'edgecolor','none');
     line(app.(['acgpop',num2str(rgclabelnum)]),x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
     line(app.(['acgpop',num2str(rgclabelnum)]),app.singlecellpanel.UserData.acg.lag, curry,...
         'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
@@ -50,6 +51,10 @@ else
     app.(['acgpop',num2str(rgclabelnum)]).Children(2).YData = y(:);
     app.(['acgpop',num2str(rgclabelnum)]).Children(1).XData = currx;
     app.(['acgpop',num2str(rgclabelnum)]).Children(1).YData = curry;
+    app.(['acgpop',num2str(rgclabelnum)]).Children(2).LineWidth = 0.5;
+    app.(['acgpop',num2str(rgclabelnum)]).Children(2).Color = app.UIFigure.UserData.colorset(rgclabelnum,:);
+    app.(['acgpop',num2str(rgclabelnum)]).Children(2).LineStyle = '-';
+    
 end
 
 end
