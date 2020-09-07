@@ -53,6 +53,7 @@ switch lower(state)
         classifiedRGCs.lastindex = find(sortbyfirstcolumn==app.T.UserData.curridx);
         classifiedRGCs.onetolastindex =  find(sortbyfirstcolumn==app.T.UserData.previdx); %app.T.UserData.previdx;
         classifiedRGCs.sortedcolumn = app.T.UserData.sortedcolumn;
+        if classifiedRGCs.sortedcolumn == 6, classifiedRGCs.sortedcolumn = 5; end % in case of sorted by strings, switch to sorted by rf
         if isfield(app.T.UserData,'sortdirection') % to get the correct sorting direction
             classifiedRGCs.sortdirection = app.T.UserData.sortdirection;
         end
