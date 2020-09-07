@@ -168,8 +168,8 @@ for icell = 1:Ncells
     
     % get simple ellipse fit and contour
     
-    tempcomp = mean(zoomsta(bpx,:),1)';
-    spcomp   = reshape(zoomsta*tempcomp, numel(rangeY),numel(rangeX));
+    %tempcomp = mean(zoomsta(bpx,:),1)';
+    %spcomp   = reshape(zoomsta*tempcomp, numel(rangeY),numel(rangeX));
     
     allmoran(icell) = rf.moransI(spcomp, size(spcomp,1), size(spcomp,2));
     
