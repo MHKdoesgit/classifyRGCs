@@ -73,9 +73,7 @@ helper.plotSTAframesApp(app, 'update');
 %     app.sta.Children(staimg(ii)).CData = appdat.rf.STA{curridx}(:,:,end-ii);
 % end
 if isfield(appdat,'dsos')
-    if ~isempty(appdat.dsos)
     helper.plotDSdataApp(app,'update');
-    end
 end
 % for ii = 1:6
 %     dsp = app.(['ds',num2str(ii)]).Children;

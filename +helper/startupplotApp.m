@@ -71,7 +71,11 @@ app.spatialcomp.Title.FontSize = 11;
 
 helper.plotSTAframesApp(app, 'new');
 
-helper.plotDSdataApp(app, 'new');
+if isfield(appdat,'dsos')
+    if ~isempty(appdat.dsos)
+        helper.plotDSdataApp(app, 'new');
+    end
+end
 
 helper.plotPCAsApp(app);
 
