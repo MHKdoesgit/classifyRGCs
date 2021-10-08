@@ -57,7 +57,7 @@ switch lower(state)
         if isfield(app.T.UserData,'sortdirection') % to get the correct sorting direction
             classifiedRGCs.sortdirection = app.T.UserData.sortdirection;
         end
-        saveingfilename = ['Classified retinal ganglion cells for experiment on ',datemaker(app.UIFigure.UserData.savingpath),'.mat'];
+        saveingfilename = ['Classified retinal ganglion cells for experiment on ',helper.datemaker(app.UIFigure.UserData.savingpath),'.mat'];
         save([app.UIFigure.UserData.savingpath,filesep,saveingfilename],'-v7.3','-struct','classifiedRGCs');
         disp('saving is done!');
 end

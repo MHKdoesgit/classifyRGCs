@@ -65,8 +65,6 @@ switch key
         app.controlAxes = controlAppAxes(app);
     case 'm'
         helper.showMeanStdPopDataApp(app);
-end
-
-
-
+    case 'r'
+        refereshplotsButtonPushed(app, event);
 end

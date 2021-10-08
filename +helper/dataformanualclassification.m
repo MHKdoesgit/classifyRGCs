@@ -19,9 +19,14 @@ else
 end
 
 dsp = dir([dp,filesep,'Data Analysis',filesep,'*direction*']);
-dsp = dir([dsp.folder,filesep,dsp.name,filesep,'dsgcseq_data',filesep,'*directiongratingsequence*.mat']);
-ds = load([dsp.folder,filesep,dsp.name],'dsosdata');
-
+dsflag = false;
+if exist([dsp.folder,filesep,dsp.name],'dir')
+    dsp = [dsp.folder,filesep,dsp.name,filesep,'dsgcseq_data'];
+    if ~exist(dsp,'dir'), dsp = dir([dp,filesep,'Data Analysis',filesep,'*direction*']); end
+    dsp = dir([dsp.folder,filesep,dsp.name,filesep,'*directiongratingsequence*.mat']);
+    ds = load([dsp.folder,filesep,dsp.name],'dsosdata');
+    if ~isempty(fieldnames(ds)), dsflag = true; end
+end
 chffile = dir([savingpath,filesep,'*checkerflicker_analysis.mat']);
 
 if isempty(chffile)
@@ -87,21 +92,17 @@ acgnormrange = (cldata.acg.lagraw >=cldata.acg.normrange(1) & cldata.acg.lagraw 
 cldata.acg.autocorr = rfdata.autoCorrelations(:,acgnormrange) ./ sum(rfdata.autoCorrelations(:,acgnormrange),2);
 cldata.acg.lag = rfdata.autoCorrLag(acgnormrange);
 
-% if isfield(rf,'rnfznoise')
-%     cldata.nl = rf.rnfznoise;
-%     cldata.rf = rmfield(rf,'rnfznoise');
-% else
-%     cldata.rf = rf;
-% end
-%cldata.dsos = ds.dsosdata;
-cldata.dsos = circAvgallDScells(ds.dsosdata,size(ds.dsosdata.angles,2),size(ds.dsosdata.angles,3));
-cldata.dsos.dsi = ds.dsosdata.dsi;
-cldata.dsos.dsi_pval = ds.dsosdata.dsi_pval;
-cldata.dsos.osi = ds.dsosdata.osi;
-cldata.dsos.osi_pval = ds.dsosdata.osi_pval;
-cldata.dsos.respquality = ds.dsosdata.responsequality;
-cldata.dsos.dscandicates = ds.dsosdata.dscandicates;
-cldata.dsos.oscandicates = ds.dsosdata.oscandicates;
+
+if dsflag
+    cldata.dsos = helper.circAvgallDScells(ds.dsosdata,size(ds.dsosdata.angles,2),size(ds.dsosdata.angles,3));
+    cldata.dsos.dsi = ds.dsosdata.dsi;
+    cldata.dsos.dsi_pval = ds.dsosdata.dsi_pval;
+    cldata.dsos.osi = ds.dsosdata.osi;
+    cldata.dsos.osi_pval = ds.dsosdata.osi_pval;
+    cldata.dsos.respquality = ds.dsosdata.responsequality;
+    cldata.dsos.dscandicates = ds.dsosdata.dscandicates;
+    cldata.dsos.oscandicates = ds.dsosdata.oscandicates;
+end
 
 cldata.rfdata = rfdata;
 tc = cldata.rfdata.temporalComponents;
@@ -139,9 +140,9 @@ cldata.nl.nly = nlynorm;
 
 
 cldata.savingpath = savingpath;
-cldata.date       = datemaker(dp);
+cldata.date       = helper.datemaker(dp);
 
-save([savingpath,filesep,stimnum,'-Data for manual classification of cells for exepriment on ',datemaker(dp),'.mat'],'-struct','cldata','-v7.3');
+save([savingpath,filesep,stimnum,'-Data for manual classification of cells for exepriment on ',helper.datemaker(dp),'.mat'],'-struct','cldata','-v7.3');
 
 
 end

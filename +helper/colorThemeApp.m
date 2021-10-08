@@ -13,7 +13,7 @@ switch lower(colmode)
         buttonfontcol   = 0.1  .* [1 1 1];
         pltcol          = 1    .* [1 1 1];
         gridcol         = [0.15 0.15 0.15];
-        cmp             = flipud(cbrewer('div','RdBu',255));
+        cmp             = flipud(helper.cbrewer.cbrewer('div','RdBu',255));
         tabrowstrip     = 'on';
         tabstyle        = uistyle("BackgroundColor",fgrdcol,'FontColor',bkgcol,"FontWeight",'bold');
         
@@ -25,7 +25,7 @@ switch lower(colmode)
         buttonfontcol   = 0.95 .* [1 1 1];
         pltcol          = 0.18 .* [1 1 1];
         gridcol         = 0.85 .* [1 1 1];
-        cmp             = flipud(cbrewer('div','RdBu',255));
+        cmp             = flipud(helper.cbrewer.cbrewer('div','RdBu',255));
         tabrowstrip     = 'off';
         tabstyle        = uistyle("BackgroundColor",fgrdcol,'FontColor',bkgcol,"FontWeight",'bold');
 end

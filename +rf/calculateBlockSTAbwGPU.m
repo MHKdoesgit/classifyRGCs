@@ -38,7 +38,7 @@ for iChunk=1:Nchunks
     seed     = oseed;
     %--------------------------------------------------------------------------
     for iBlock=1:blockN
-        [stimulus(:),seed]=ran1(seed,Nyx*frameN);
+        [stimulus(:),seed]= rf.ran1(seed,Nyx*frameN);
         stimulus  = 2*single(stimulus>0.5)-1;%making stimulus into single mat of 1s and -1s
         spikes(:) = chunkspikesbin(:,:,iBlock);
         for it=1:winN

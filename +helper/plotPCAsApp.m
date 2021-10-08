@@ -20,7 +20,7 @@ else
 end
 
 
-for ii = 1:4
+for ii = 1: numel(lbtomatch)
     %rf = app.singlecellpanel.UserData.rf.correctedcenter;
     %     x = dat.pcadata.scores(cells2plt,ii);
     %     y = dat.rf.RFdiameter(cells2plt);
@@ -39,7 +39,7 @@ for ii = 1:4
         %         line(pcaplt, x,y,'Marker','o','LineStyle','none','Color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.1),...
         %             'MarkerFaceColor',app.UIFigure.UserData.colorset(rgclabelnum,:));
         
-        for jj = 1:4
+        for jj = 1: numel(lbtomatch)
             cells2plt = (strcmpi(rgclabels,lbtomatch{jj}));
             x = dat.pcadata.scores(cells2plt,ii);
             y = dat.rfdata.contourareas(cells2plt);
@@ -69,7 +69,7 @@ for ii = 1:4
         grid(pcaplt,'on');
         hold(pcaplt,'off');
     else
-        for jj = 1:4
+        for jj = 1: numel(lbtomatch)
             cells2plt = (strcmpi(rgclabels,lbtomatch{jj}));
             x = dat.pcadata.scores(cells2plt,ii);
             y = dat.rfdata.contourareas(cells2plt);

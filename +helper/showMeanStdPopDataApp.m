@@ -13,20 +13,22 @@ for ii = 1:numplts
         
         p = app.([poppltnames{jj},num2str(ii)]).Children;
         
-        switch lower(ii)
-            
-            case {1, '1', 'off parasol', 'off p'}
-                lbtomatch = 'off parasol';
-                
-            case {2, '2', 'on parasol', 'on p'}
-                lbtomatch = 'on parasol';
-                
-            case {3, '3', 'off midget', 'off m'}
-                lbtomatch = 'off midget';
-                
-            case {4, '4', 'on midget', 'on m'}
-                lbtomatch = 'on midget';
-        end
+%         switch lower(ii)
+%             
+%             case {1, '1', 'off parasol', 'off p'}
+%                 lbtomatch = 'off parasol';
+%                 
+%             case {2, '2', 'on parasol', 'on p'}
+%                 lbtomatch = 'on parasol';
+%                 
+%             case {3, '3', 'off midget', 'off m'}
+%                 lbtomatch = 'off midget';
+%                 
+%             case {4, '4', 'on midget', 'on m'}
+%                 lbtomatch = 'on midget';
+%         end
+        
+        lbtomatch = getAppRGClabels(ii);
         
         cells2plt = (strcmpi(rgclabels,lbtomatch));
         

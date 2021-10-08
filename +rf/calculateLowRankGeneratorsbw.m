@@ -14,7 +14,7 @@ stimulus   = zeros(Nyx, Nframes,'single'); %preallocate stimulus
 filterstim = zeros(Ncells, Nframes, Nblocks, 'single');
 
 for iblock = 1:Nblocks
-    [stimulus(:),seed] = ran1bool(seed, Nyx*Nframes);
+    [stimulus(:),seed] = rf.ran1bool(seed, Nyx*Nframes);
     stimulus = 2*stimulus - 1;
     filterstim(:, :, iblock) = staspace*stimulus;
 end

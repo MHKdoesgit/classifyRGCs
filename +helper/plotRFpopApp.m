@@ -5,24 +5,26 @@ function plotRFpopApp(app, lbindex, varargin)
 curridx     = app.T.UserData.curridx;
 rgclabels   = app.T.Data(:,6);
 
-switch lower(lbindex)
-    
-    case {1, '1', 'off parasol', 'off p'}
-        lbtomatch = 'off parasol';
-        rgclabelnum = 1;
-        
-    case {2, '2', 'on parasol', 'on p'}
-        lbtomatch = 'on parasol';
-        rgclabelnum = 2;
-        
-    case {3, '3', 'off midget', 'off m'}
-        lbtomatch = 'off midget';
-        rgclabelnum = 3;
-        
-    case {4, '4', 'on midget', 'on m'}
-        lbtomatch = 'on midget';
-        rgclabelnum = 4;
-end
+[lbtomatch, rgclabelnum] = helper.getAppRGClabels(lbindex);
+
+% switch lower(lbindex)
+%     
+%     case {1, '1', 'off parasol', 'off p'}
+%         lbtomatch = 'off parasol';
+%         rgclabelnum = 1;
+%         
+%     case {2, '2', 'on parasol', 'on p'}
+%         lbtomatch = 'on parasol';
+%         rgclabelnum = 2;
+%         
+%     case {3, '3', 'off midget', 'off m'}
+%         lbtomatch = 'off midget';
+%         rgclabelnum = 3;
+%         
+%     case {4, '4', 'on midget', 'on m'}
+%         lbtomatch = 'on midget';
+%         rgclabelnum = 4;
+% end
 
 cells2plt = (strcmpi(rgclabels,lbtomatch));
 

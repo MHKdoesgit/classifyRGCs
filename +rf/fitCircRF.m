@@ -51,7 +51,7 @@ end
 function [f,g] = circgaussOptim(p,X,Y)
 % Calculate objective f
 
-[lf,lg]=gaussMatrixCircFun(p,X);
+[lf,lg]=  rf.gaussMatrixCircFun(p,X);
 
 f = sum((lf-Y).^2)/2;
 
