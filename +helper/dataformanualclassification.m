@@ -2,37 +2,25 @@
 
 function cldata = dataformanualclassification(dp)
 
-savingpath = [dp,filesep,'Data Analysis',filesep,'Manual Classification of Primate Ganglion Cells'];
+savingpath = [dp,filesep,'Data_Analysis',filesep,'Manual Classification of Primate Ganglion Cells'];
 if not(exist(savingpath,'dir')), mkdir(savingpath); end
 
 
-clusp = dir([dp,filesep,'CellsList_*.mat']);
-clus = struct2array(load([clusp.folder, filesep, clusp.name]));
-
-if exist([dp,'/ksrasters'],'dir')
-    sortinginfo = struct2array(load([dp,'/ksrasters/ksrasters.mat'],'sort_info'));
-    sortinginfo = sortinginfo(ismember([sortinginfo.id],clus(:,4)),:);
-elseif exist([dp,'/preprocessed'],'dir')
-    sortinginfo = struct2array(load([dp,'/preprocessed/sortinginfo.mat']));
-else
-    sortinginfo = [];
-end
-
-dsp = dir([dp,filesep,'Data Analysis',filesep,'*direction*']);
+dsp = dir([dp,filesep,'Data_Analysis',filesep,'*direction*']);
 dsflag = false;
-if exist([dsp.folder,filesep,dsp.name],'dir')
+if exist([dsp.folder,filesep,dsp.name],'dir') && ~isempty(dsp)
     dsp = [dsp.folder,filesep,dsp.name,filesep,'dsgcseq_data'];
     if ~exist(dsp,'dir'), dsp = dir([dp,filesep,'Data Analysis',filesep,'*direction*']); end
     dsp = dir([dsp.folder,filesep,dsp.name,filesep,'*directiongratingsequence*.mat']);
     ds = load([dsp.folder,filesep,dsp.name],'dsosdata');
     if ~isempty(fieldnames(ds)), dsflag = true; end
 end
-chffile = dir([savingpath,filesep,'*checkerflicker_analysis.mat']);
+chffile = dir([savingpath,filesep,'*checkerflicker_analysis*.mat']);
 
 if isempty(chffile)
     disp('no receptive data found in this folder, analyzing checkerflicker data...');
     rfdata = rf.rfdataforclassification(dp, savingpath);
-    chffile = dir([savingpath,filesep,'*checkerflicker_analysis.mat']);
+    chffile = dir([savingpath,filesep,'*checkerflicker_analysis*.mat']);
     stimnum = extractBefore(chffile.name,'-');
 else
     if numel(chffile) > 1
@@ -50,12 +38,38 @@ else
     end
 end
 
+% load clusters
+if isfield(rfdata,'clusters')
+    clus = rfdata.clusters;
+else
+    clusp = dir([dp,filesep,'experiment_info',filesep,'CellsList_*.mat']);
+    clus = struct2array(load([clusp.folder, filesep, clusp.name]));
+end
+
+if exist([dp,'/ksrasters'],'dir')
+    sortinginfo = struct2array(load([dp,'/ksrasters/ksrasters.mat'],'sort_info'));
+    sortinginfo = sortinginfo(ismember([sortinginfo.id],clus(:,4)),:);
+elseif exist([dp,'/preprocessed'],'dir')
+    sortinginfo = struct2array(load([dp,'/preprocessed/sortinginfo.mat']));
+else
+    sortinginfo = cell(size(clus,1),1);
+    for ii = 1:size(clus,1)
+        sortinginfo{ii}.ch = clus(ii,1);
+        sortinginfo{ii}.clus = clus(ii,2);
+        sortinginfo{ii}.id = NaN;
+        sortinginfo{ii}.quality = clus(ii,3);
+        sortinginfo{ii}.n_spikes = NaN;
+        sortinginfo{ii}.comment = {''};        
+    end
+    sortinginfo = cell2mat(sortinginfo);
+end
+
 
 % rf = loadRFdata(dp,clus,'STA','gaussfit','rnfznoise','correctedcenter','RFdiameter','peakpos','para',...
 %     'tempComp','spatialComp','moransI','correctedsurround','subrow','subcol');
 %if isfield(rf,'green'), rf = rf.green; end
 
-% acgdp = dir([dp,filesep,'Data Analysis',filesep,'*Auto-Cross correlation*']);
+% acgdp = dir([dp,filesep,'Data_Analysis',filesep,'*Auto-Cross correlation*']);
 % acgdp = dir([acgdp.folder,filesep,acgdp.name,filesep,'*checkerflicker*']);
 % if isempty(acgdp)
 %     acgdp = dir([dp,filesep,'Data Analysis',filesep,'*Auto-Cross correlation*']);
@@ -86,7 +100,7 @@ cldata.sortinginfo = sortinginfo;
 % cldata.acg.lag = acgdat.laghalfms;
 cldata.acg.autocorrraw = rfdata.autoCorrelations;
 cldata.acg.lagraw = rfdata.autoCorrLag;
-cldata.acg.isnormalized = rfdata.stimPara.normACG;
+cldata.acg.isnormalized = rfdata.para.normACG;
 cldata.acg.normrange = [0 50];
 acgnormrange = (cldata.acg.lagraw >=cldata.acg.normrange(1) & cldata.acg.lagraw <= cldata.acg.normrange(2));
 cldata.acg.autocorr = rfdata.autoCorrelations(:,acgnormrange) ./ sum(rfdata.autoCorrelations(:,acgnormrange),2);
@@ -105,15 +119,15 @@ if dsflag
 end
 
 cldata.rfdata = rfdata;
-tc = cldata.rfdata.temporalComponents;
-cldata.rfdata.temporalComponents = tc ./ sqrt(sum(tc.^2,2));
+tc = cldata.rfdata.temporalComps;
+cldata.rfdata.temporalComps = tc ./ sqrt(sum(tc.^2,2));
 tcf = cldata.rfdata.modeltcomps;
 cldata.rfdata.modeltcomps = tcf ./ sqrt(sum(tcf.^2,2));
 
-tc = rfdata.temporalComponents;
+tc = rfdata.temporalComps;
 [pcoeff, pscore] = pca(tc);
-
-ptc = pcoeff(end-15:end,1); % first principal component
+if size(pcoeff,1) > 20, s=15; else, s = 0;end % to only select limited number of pcas
+ptc = pcoeff(end-s:end,1); % first principal component
 [maxptc, maxloc] = max(ptc);
 [minptc, minloc] = min(ptc);
 
@@ -131,18 +145,22 @@ cldata.rfcontours.contourspts = rfdata.contourpoints;
 cldata.rfcontours.scalevalue = 1;
 
 % put the nonlinearities in separate field 
-nlynorm = zeros(size(rfdata.nlnvalslr)); 
+nlynorm = zeros(size(rfdata.nly)); 
 for ii = 1:size(clus,1)
-    nlynorm(ii,:) = rfdata.nlnvalslr(ii,:) ./ max(rfdata.nlnvalslr(ii,:),[],'all');    
+    nlynorm(ii,:) = rfdata.nly(ii,:) ./ max(rfdata.nly(ii,:),[],'all');    
 end
-cldata.nl.nlx = rfdata.nlncentslr;
+cldata.nl.nlx = rfdata.nlx;
 cldata.nl.nly = nlynorm;
 
 
 cldata.savingpath = savingpath;
-cldata.date       = helper.datemaker(dp);
+if isfield(rfdata.para,'date')
+    cldata.date = rfdata.para.date;
+else
+    cldata.date       = helper.datemaker(dp);
+end
 
-save([savingpath,filesep,stimnum,'-Data for manual classification of cells for exepriment on ',helper.datemaker(dp),'.mat'],'-struct','cldata','-v7.3');
+save([savingpath,filesep,stimnum,'-Data_for_manual_classification_for_exepriment_on_',cldata.date,'.mat'],'-struct','cldata','-v7.3');
 
 
 end

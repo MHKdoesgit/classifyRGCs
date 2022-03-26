@@ -25,15 +25,15 @@ function plotSTAframesApp(app, state,varargin)
 
 rfdata = app.singlecellpanel.UserData.rfdata;
 curridx = app.T.UserData.curridx;
-mx = max(abs(squeeze(rfdata.staAll(curridx,:,:,:))),[],'all');
+mx = max(abs(squeeze(rfdata.sta(curridx,:,:,:))),[],'all');
 
 switch lower(state)
     case 'new'
         % setting some options
         p = inputParser();
-        p.addParameter('nframes', 15, @(x) isnumeric(x));
+        p.addParameter('nframes', 12, @(x) isnumeric(x));
         p.addParameter('nrows', 3, @(x) isnumeric(x));
-        p.addParameter('ncols', 5, @(x) isnumeric(x));
+        p.addParameter('ncols', 4, @(x) isnumeric(x));
         p.addParameter('gap', [2 2], @(x) isnumeric(x));
         %p.addParameter('stapeak', nan(1,3));
         p.addParameter('outline', true, @(x) islogical(x));
@@ -62,11 +62,11 @@ switch lower(state)
 %             ncols = 7;%dims(2);
 %         end
         
-        xl = linspace(0,rfdata.stimPara.screen(1),rfdata.stimPara.Nx);
-        yl = linspace(0,rfdata.stimPara.screen(2),rfdata.stimPara.Ny);
+        xl = linspace(0,rfdata.para.screen(1),rfdata.para.Nx);
+        yl = linspace(0,rfdata.para.screen(2),rfdata.para.Ny);
         % get the indices correct, if the nrows and ncols don't match it will crash
         % here
-        rfloc = reshape(length(rfdata.timeVec)-nframes+1:length(rfdata.timeVec),nrows,ncols);
+        rfloc = reshape(length(rfdata.tcTimeVec)-nframes+1:length(rfdata.tcTimeVec),nrows,ncols);
         
         idx = 0;
         yidx = 0;
@@ -75,7 +75,7 @@ switch lower(state)
             xm = idx*max(xl); if idx~=0, xm = xm+idx*(20*pltops.gap(1)); end
             ym = yidx*max(yl); if yidx~=0, ym = ym+yidx*(20*pltops.gap(2)); end
             if mod(kk,ncols)==0, yidx = yidx+1;end
-            staimg = uint8(255*((squeeze(rfdata.staAll(curridx,:,:,rfloc(kk)))/mx)+1)/2);
+            staimg = uint8(255*((squeeze(rfdata.sta(curridx,:,:,rfloc(kk)))/mx)+1)/2);
             imagesc(app.sta, xm + xl,ym + yl,staimg);
            % imagesc(app.sta, xm + xl,ym + yl,rfdata.STA{curridx}(:,:,rfloc(kk)));
             hold(app.sta,'on');
@@ -109,7 +109,7 @@ switch lower(state)
         
         staimg = find(strcmpi(get(app.sta.Children,'type'),'image'));
         for ii = 1:numel(staimg)
-            thisstaimg = uint8(255*((squeeze(rfdata.staAll(curridx,:,:,end-ii))/mx)+1)/2);            
+            thisstaimg = uint8(255*((squeeze(rfdata.sta(curridx,:,:,end-ii+1))/mx)+1)/2);            
             app.sta.Children(staimg(ii)).CData = thisstaimg;%rfdata.STA{curridx}(:,:,end-ii);
         end
         

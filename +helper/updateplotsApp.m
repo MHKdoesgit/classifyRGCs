@@ -11,7 +11,7 @@ app.acg.Children.YData = appdat.acg.autocorr(curridx,:);
 
 % temporal component
 app.tempcomp.Children(1).YData = appdat.rfdata.modeltcomps(curridx,:); %  fit
-app.tempcomp.Children(2).YData = appdat.rfdata.temporalComponents(curridx,:); % data
+app.tempcomp.Children(2).YData = appdat.rfdata.temporalComps(curridx,:); % data
 
 % all RFs
 % x = [squeeze(appdat.rf.correctedcenter(1,:,:));nan(1,size(appdat.rf.correctedcenter,3))];
@@ -40,9 +40,9 @@ app.RFall.Title.String = ['center: ',num2str(round(appdat.rfdata.rfdiameters(cur
 % app.RFall.Children(curridx).Color = [1 0 0];
 % app.RFall.Children(curridx).LineWidth = 2;
 
-xsx = appdat.rfdata.spaceVecX(appdat.rfdata.allrangex{curridx});
-ysy = appdat.rfdata.spaceVecY(appdat.rfdata.allrangey{curridx});
-sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{curridx}, appdat.rfdata.allrangex{curridx}));
+xsx = appdat.rfdata.spaceVecX(appdat.rfdata.rangex{curridx});
+ysy = appdat.rfdata.spaceVecY(appdat.rfdata.rangey{curridx});
+sc = squeeze(appdat.rfdata.spatialComps(curridx, appdat.rfdata.rangey{curridx}, appdat.rfdata.rangex{curridx}));
 
 % spatial component
 % xsx = appdat.rf.subrow(curridx,:);      xsx = xsx(~isnan(xsx));
@@ -62,8 +62,8 @@ app.spatialcomp.Children(1).YData = squeeze(appdat.rfdata.ellipsepoints(curridx,
 % plotting surround
 app.spatialcomp.Children(2).XData = squeeze(appdat.rfdata.contourpoints(curridx,1,:)); %appdat.rf.correctedcenter(1,:,curridx);
 app.spatialcomp.Children(2).YData = squeeze(appdat.rfdata.contourpoints(curridx,2,:)); %appdat.rf.correctedcenter(2,:,curridx);
-app.spatialcomp.Title.String = ['morans I: ', num2str(round(appdat.rfdata.allmoran(curridx,1),2)),...
-    ', surround index: ', num2str(round(appdat.rfdata.surroundIdx(curridx,1),2))];
+app.spatialcomp.Title.String = ['morans I: ', num2str(round(appdat.rfdata.moransI(curridx,1),2)),...
+    ', surround index: ', num2str(round(appdat.rfdata.surroundIndex(curridx,1),2))];
 
 
 % STA frames

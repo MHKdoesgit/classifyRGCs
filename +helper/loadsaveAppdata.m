@@ -7,7 +7,7 @@ switch lower(state)
     case 'loaddata'
         dp = uigetdir(['D:',filesep,'2-MARMOSET',filesep],'Select Data Folder');
         app.UIFigure.UserData.savingpath = dp;
-        cldata = dir([dp,filesep,'*Data for manual classification of cells*']);
+        cldata = dir([dp,filesep,'*Data_for_manual_classification*']);
         if numel(cldata) > 1
             [indx,tf] = listdlg('PromptString','More than one dataset for classification is found, select one:',...
                 'Name','Data selection','SelectionMode','single','ListString',{cldata.name},'ListSize',[500 100]);

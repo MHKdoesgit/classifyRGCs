@@ -41,7 +41,7 @@ else
     curry  = NaN;
 end
 
-if isfield(app.singlecellpanel.UserData.rfdata,'nlncentsmodel')
+if isfield(app.singlecellpanel.UserData.rfdata,'nly')
     if isempty(app.(['nlpop',num2str(rgclabelnum)]).Children)
         patch(app.(['nlpop',num2str(rgclabelnum)]), x(:),y(:),1,'edgecolor','none');
         line(app.(['nlpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));

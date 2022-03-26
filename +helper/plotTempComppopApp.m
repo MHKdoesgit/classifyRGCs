@@ -28,21 +28,21 @@ rgclabels   = app.T.Data(:,6);
 
 cells2plt = (strcmpi(rgclabels,lbtomatch));
 
-x = repmat([app.singlecellpanel.UserData.rfdata.timeVec';nan(1,1)],sum(cells2plt),1);
-y = [ app.singlecellpanel.UserData.rfdata.temporalComponents(cells2plt,:)';nan(1,sum(cells2plt))];
+x = repmat([app.singlecellpanel.UserData.rfdata.tcTimeVec';nan(1,1)],sum(cells2plt),1);
+y = [ app.singlecellpanel.UserData.rfdata.temporalComps(cells2plt,:)';nan(1,sum(cells2plt))];
 
 if isempty(x), x = NaN; y = NaN; end % little trick to plot not NaN for empty shit
 if any(ismember(find(cells2plt),curridx))
-    curry  = app.singlecellpanel.UserData.rfdata.temporalComponents(curridx,:);
+    curry  = app.singlecellpanel.UserData.rfdata.temporalComps(curridx,:);
 else
-    curry = nan(size(app.singlecellpanel.UserData.rfdata.timeVec));
+    curry = nan(size(app.singlecellpanel.UserData.rfdata.tcTimeVec));
 end
 
 
 if isempty(app.(['tcpop',num2str(rgclabelnum)]).Children)
     patch(app.(['tcpop',num2str(rgclabelnum)]), x(:),y(:),1,'edgecolor','none');
     line(app.(['tcpop',num2str(rgclabelnum)]), x(:), y(:),'color',app.UIFigure.UserData.colorset(rgclabelnum,:));
-    line(app.(['tcpop',num2str(rgclabelnum)]), app.singlecellpanel.UserData.rfdata.timeVec,...
+    line(app.(['tcpop',num2str(rgclabelnum)]), app.singlecellpanel.UserData.rfdata.tcTimeVec,...
         curry, 'color',abs(app.UIFigure.UserData.colorset(rgclabelnum,:)-0.2),'Linewidth',2);
     app.(['tcpop',num2str(rgclabelnum)]).XLim = [-0.5 0];
     app.(['tcpop',num2str(rgclabelnum)]).YLim = [-0.85 0.85];

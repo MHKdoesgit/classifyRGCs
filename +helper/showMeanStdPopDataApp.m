@@ -28,7 +28,7 @@ for ii = 1:numplts
 %                 lbtomatch = 'on midget';
 %         end
         
-        lbtomatch = getAppRGClabels(ii);
+        lbtomatch = helper.getAppRGClabels(ii);
         
         cells2plt = (strcmpi(rgclabels,lbtomatch));
         

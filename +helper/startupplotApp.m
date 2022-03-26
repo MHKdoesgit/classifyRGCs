@@ -13,8 +13,8 @@ app.acg.XTick = 0:25:100;
 pbaspect(app.acg,[4 3 1]);
 app.acg.Title.FontSize = 11;
 
-line(app.tempcomp,appdat.rfdata.timeVec,appdat.rfdata.temporalComponents(curridx,:),'color',cols(1,:),'LineWidth',1);
-line(app.tempcomp,appdat.rfdata.timeVec,appdat.rfdata.modeltcomps(curridx,:),'color',cols(2,:),'LineWidth',1);
+line(app.tempcomp,appdat.rfdata.tcTimeVec,appdat.rfdata.temporalComps(curridx,:),'color',cols(1,:),'LineWidth',1);
+line(app.tempcomp,appdat.rfdata.tcTimeVec,appdat.rfdata.modeltcomps(curridx,:),'color',cols(2,:),'LineWidth',1);
 app.tempcomp.XLim = [-0.5 0];
 legend(app.tempcomp,'data','fit','Location','southwest');       legend(app.tempcomp, 'boxoff');
 pbaspect(app.tempcomp,[4 3 1]);
@@ -31,7 +31,7 @@ line(app.RFall, x(:),y(:),'color',0.65*[1 1 1],'linewidth',0.5);
 line(app.RFall, squeeze(appdat.rfdata.contourpoints(curridx,1,:)),...
     squeeze(appdat.rfdata.contourpoints(curridx,2,:)),'color','r','linewidth',2);
 axis(app.RFall,'equal');        axis(app.RFall,'tight');        box(app.RFall,'on');
-app.RFall.XLim = [0 appdat.rfdata.stimPara.screen(1)];       app.RFall.YLim = [0 appdat.rfdata.stimPara.screen(2)];
+app.RFall.XLim = [0 appdat.rfdata.para.screen(1)];       app.RFall.YLim = [0 appdat.rfdata.para.screen(2)];
 app.RFall.XTick = [];           app.RFall.YTick = [];
 app.RFall.Title.String = ['center: ',num2str(round(appdat.rfdata.rfdiameters(curridx,1)*1e6,1)),' (µm)',...
     ', area: ',num2str(round(appdat.rfdata.contourareas(curridx),3)),' (mm^2)'];
@@ -46,9 +46,9 @@ app.RFall.YDir = 'reverse';
 % ysy = appdat.rf.subcol(curridx,:);      ysy = ysy(~isnan(ysy));
 % mx = max(abs(appdat.rf.spatialComp(:,:,curridx)),[],'all');
 
-xsx = appdat.rfdata.spaceVecX(appdat.rfdata.allrangex{curridx});
-ysy = appdat.rfdata.spaceVecY(appdat.rfdata.allrangey{curridx});
-sc = squeeze(appdat.rfdata.spatialComponents(curridx, appdat.rfdata.allrangey{curridx}, appdat.rfdata.allrangex{curridx}));
+xsx = appdat.rfdata.spaceVecX(appdat.rfdata.rangex{curridx});
+ysy = appdat.rfdata.spaceVecY(appdat.rfdata.rangey{curridx});
+sc = squeeze(appdat.rfdata.spatialComps(curridx, appdat.rfdata.rangey{curridx}, appdat.rfdata.rangex{curridx}));
 
 imagesc(app.spatialcomp,xsx,ysy, sc);
 if ~isempty(sc) && max(abs(sc(:))) ~= 0
@@ -65,8 +65,8 @@ line(app.spatialcomp,squeeze(appdat.rfdata.ellipsepoints(curridx,1,:)),...
 %app.spatialcomp.CLim = [-mx mx];
 axis(app.spatialcomp,'equal');      axis(app.spatialcomp,'tight');          box(app.spatialcomp,'on');
 app.spatialcomp.XTick = [];           app.spatialcomp.YTick = [];
-app.spatialcomp.Title.String = ['morans I: ', num2str(round(appdat.rfdata.allmoran(curridx,1),2)),...
-    ', surround index: ', num2str(round(appdat.rfdata.surroundIdx(curridx,1),2))];
+app.spatialcomp.Title.String = ['morans I: ', num2str(round(appdat.rfdata.moransI(curridx,1),2)),...
+    ', surround index: ', num2str(round(appdat.rfdata.surroundIndex(curridx,1),2))];
 app.spatialcomp.Title.FontSize = 11;
 
 helper.plotSTAframesApp(app, 'new');
